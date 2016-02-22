@@ -1,0 +1,41 @@
+﻿<Window x:Class="CollisionEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:CollisionEditor"
+        Title="MainWindow" Height="600" Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <DockPanel VerticalAlignment="Top" Height="20">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Command="{Binding OnRequestMapOpen}"/>
+                    <MenuItem Header="_Save" Command="{Binding OnRequestMapSave}"/>
+                    <MenuItem Header="_Close" Command="{Binding OnRequestMapClose}"/>
+                    <Separator/>
+                    <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>
+                </MenuItem>
+                <MenuItem Header="Edit">
+                    <MenuItem Header="_Undo" Command="{Binding OnRequestUndo}"/>
+                    <MenuItem Header="_Redo" Command="{Binding OnRequestRedo}"/>
+                    <MenuItem Header="Regroup Triangles" Command="{Binding OnRequestRegroupTris}"/>
+                    <MenuItem Header="Recategorize Triangles" Command="{Binding OnRequestRecategorizeTris}"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        <DockPanel LastChildFill="False" Margin="0,20,0,0" Width="210" HorizontalAlignment="Left" Grid.RowSpan="2">
+            <TreeView x:Name="treeView" Width="209" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Categories}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type loc:Category}" ItemsSource="{Binding Groups}">
+                        <TextBlock Text="{Binding Path=Name}"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="210,20,0,0" Grid.RowSpan="2" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">
+            <WindowsFormsHost x:Name="GLHost" Background="{x:Null}" DockPanel.Dock="Bottom" Initialized="GLHost_Initialized" Foreground="{x:Null}"/>
+        </DockPanel>
+    </Grid>
+</Window>
