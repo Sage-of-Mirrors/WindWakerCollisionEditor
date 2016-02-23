@@ -379,7 +379,7 @@ namespace CollisionEditor
                 }
             }
 
-            if (Input.GetKey(Keys.F))
+            if (Input.GetKeyDown(Keys.F))
             {
                 FocusCamera(this, new EventArgs());
             }

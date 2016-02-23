@@ -40,11 +40,26 @@ namespace CollisionEditor
 
         #endregion
 
-        private bool m_isDataLoaded;
-
         private Renderer m_renderer;
 
         private TreeView m_tree;
+
+        public Group SelectedGroup
+        {
+            get { return m_selectedGroup; }
+
+            set
+            {
+                if (value != m_selectedGroup)
+                {
+                    m_selectedGroup = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private Group m_selectedGroup;
 
         public ObservableCollection<Category> Categories
         {
@@ -83,7 +98,8 @@ namespace CollisionEditor
 
         void m_renderer_FocusCamera(object sender, EventArgs e)
         {
-            FocusCamera(new AABB(m_selectedTris));
+            if (m_selectedTris.Count != 0)
+                FocusCamera(new AABB(m_selectedTris));
         }
 
         void m_renderer_RecategorizeTris(object sender, EventArgs e)
@@ -145,8 +161,27 @@ namespace CollisionEditor
                             }
                             break;
                     }
+
+                    FocusCameraInit();
                 }
             }
+        }
+
+        internal void FocusCameraInit()
+        {
+            List<Triangle> allTris = new List<Triangle>();
+
+            foreach(Category cat in Categories)
+            {
+                foreach (Group grp in cat.Groups)
+                {
+                    allTris.AddRange(grp.Triangles);
+                }
+            }
+
+            AABB boundingBox = new AABB(allTris);
+
+            m_renderer.Cam.SetCameraView(boundingBox, m_renderer.m_control.Width, m_renderer.m_control.Height);
         }
 
         public void Save()
@@ -181,12 +216,17 @@ namespace CollisionEditor
             {
                 Group grp = e.NewValue as Group;
 
+                SelectedGroup = grp;
+
                 SelectTriangleEventArgs args = new SelectTriangleEventArgs();
 
                 args.SelectedTris = new List<Triangle>(grp.Triangles);
 
                 m_renderer_SelectedTris(this, args);
             }
+
+            else
+                SelectedGroup = null;
         }
 
         private void GetArcData()
@@ -555,7 +595,7 @@ namespace CollisionEditor
         /// <summary> The user has requested to save the currently open map. Only available if a map is currently opened. </summary>
         public ICommand OnRequestMapSave
         {
-            get { return new RelayCommand(x => Save(), x => m_isDataLoaded); }
+            get { return new RelayCommand(x => Save(), x => m_categories != null); }
         }
 
         /// <summary> The user has requested to unload the currently open map. Only available if a map is currently opened. Ask user if they'd like to save. </summary>
@@ -600,6 +640,29 @@ namespace CollisionEditor
             get { return new RelayCommand(x => Application.Current.MainWindow.Close()); }
         }
 
+        public IEnumerable<TerrainType> TerrainTypeValues
+        {
+            get
+            {
+                return Enum.GetValues(typeof(TerrainType))
+                    .Cast<TerrainType>();
+            }
+        }
+
         #endregion
+    }
+
+    public class NullToFalseConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value != null;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+          object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
