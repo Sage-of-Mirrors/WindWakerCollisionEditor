@@ -60,7 +60,7 @@ namespace CollisionEditor
 
             for (int i = 0; i < PropertyCount; i++)
             {
-                Property tempProp = new Property();
+                Property tempProp = new Property(stream);
 
                 Properties.Add(tempProp);
             }

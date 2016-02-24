@@ -23,6 +23,7 @@ using GameFormatReader.GCWii.Binaries.GC;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace CollisionEditor
 {
@@ -43,6 +44,8 @@ namespace CollisionEditor
         private Renderer m_renderer;
 
         private TreeView m_tree;
+
+        public PropertyGrid test;
 
         public Group SelectedGroup
         {
@@ -76,7 +79,13 @@ namespace CollisionEditor
             }
         }
 
-        private List<Triangle> m_selectedTris;
+        public List<Triangle> m_selectedTris;
+
+        public TriangleSelectionViewModel SelectedTriangles { get { return m_selectedViewTriangles; }
+            set { m_selectedViewTriangles = value;  NotifyPropertyChanged(); }
+        }
+
+        private TriangleSelectionViewModel m_selectedViewTriangles;
 
         //Primary data structure
         private ObservableCollection<Category> m_categories;
@@ -86,6 +95,8 @@ namespace CollisionEditor
             m_renderer = new Renderer(ctrl, host);
 
             m_selectedTris = new List<Triangle>();
+
+            SelectedTriangles = new TriangleSelectionViewModel();
 
             m_renderer.SelectedTris += m_renderer_SelectedTris;
 
@@ -116,16 +127,27 @@ namespace CollisionEditor
 
         void m_renderer_SelectedTris(object sender, SelectTriangleEventArgs e)
         {
-            if (m_selectedTris.Count != 0)
+            if (e.SelectedTris.Count != 0)
             {
-                foreach (Triangle tri in m_selectedTris)
-                    tri.IsSelected = false;
+                if (SelectedTriangles.SelectedItems.Count != 0)
+                {
+                    foreach (Triangle tri in SelectedTriangles.SelectedItems)
+                    {
+                        tri.IsSelected = false;
+                    }
+
+                    SelectedTriangles.SelectedItems.Clear();
+                }
+
+                foreach (Triangle tri in e.SelectedTris)
+                {
+                    tri.IsSelected = true;
+
+                    SelectedTriangles.SelectedItems.Add(tri);
+                }
+
+                test.Update();
             }
-
-            m_selectedTris = e.SelectedTris;
-
-            foreach (Triangle tri in m_selectedTris)
-                tri.IsSelected = true;
         }
 
         internal void FocusCamera(AABB boundingBox)

@@ -4,8 +4,12 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:loc="clr-namespace:CollisionEditor"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="CollisionEditor.MainWindow"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1000" MouseRightButtonUp="Window_MouseRightButtonUp">
+    <Window.DataContext>
+        <loc:ViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -15,12 +19,13 @@
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="17*"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
-        <DockPanel VerticalAlignment="Top" Height="20">
-            <Menu DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="212"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3">
+            <Menu Margin="0,0,0,0" Height="20" DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_Open" Command="{Binding OnRequestMapOpen}"/>
                     <MenuItem Header="_Save" Command="{Binding OnRequestMapSave}"/>
@@ -48,7 +53,21 @@
                 </TreeView.ItemTemplate>
             </TreeView>
         </DockPanel>
-        <DockPanel LastChildFill="True" Margin="210,20,0,0" Grid.RowSpan="2" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">
+        <DockPanel LastChildFill="False" Margin="0,8,0,10" Grid.Column="2">
+            <Grid DockPanel.Dock="Right" Margin="0,1,0,0">
+                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" IsCategorized="False" DockPanel.Dock="Bottom" Margin="0,11,6,0" RenderTransformOrigin="0.5,0.5" Width="201" Height="344" VerticalAlignment="Top">
+                    <xctk:PropertyGrid.PropertyDefinitions>
+                        <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="IsSelected" IsBrowsable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="SelectedItems" IsBrowsable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="Vertex1" IsBrowsable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="Vertex2" IsBrowsable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="Vertex3" IsBrowsable="False"/>
+                    </xctk:PropertyGrid.PropertyDefinitions>
+                </xctk:PropertyGrid>
+            </Grid>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1">
             <WindowsFormsHost x:Name="GLHost" Background="{x:Null}" DockPanel.Dock="Bottom" Initialized="GLHost_Initialized" Foreground="{x:Null}"/>
         </DockPanel>
         <DockPanel LastChildFill="True" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75">

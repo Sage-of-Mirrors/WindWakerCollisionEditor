@@ -32,6 +32,8 @@ namespace CollisionEditor
 
             m_viewModel.SetTreeView(treeView);
 
+            m_viewModel.test = testPropGrid;
+
             DataContext = m_viewModel;
         }
 
@@ -48,6 +50,11 @@ namespace CollisionEditor
 
             GLHost.Child = m_glControl;
             GLHost.AllowDrop = true;
+        }
+
+        private void Window_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            
         }
     }
 }
