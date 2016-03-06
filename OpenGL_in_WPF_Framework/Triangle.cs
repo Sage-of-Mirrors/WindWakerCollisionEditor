@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 using OpenTK;
 
 namespace CollisionEditor
@@ -59,7 +60,7 @@ namespace CollisionEditor
         /// <summary>
         /// Camera ID. Purpose unknown.
         /// </summary>
-        public int CameraID
+        public virtual int CameraID
         {
             get { return m_camID; }
             set
@@ -105,7 +106,7 @@ namespace CollisionEditor
         /// <summary>
         /// The sound that plays when an actor walks across the face.
         /// </summary>
-        public int SoundID
+        public virtual int SoundID
         {
             get { return m_soundID; }
             set
@@ -128,7 +129,7 @@ namespace CollisionEditor
         /// <summary>
         /// The index of an entry related to ENVR & Co. Colo?
         /// </summary>
-        public int PolyColor
+        public virtual int PolyColor
         {
             get { return m_polyColor; }
             set
@@ -152,7 +153,7 @@ namespace CollisionEditor
 
         private int m_attribCode;
 
-        public int AttributeCode
+        public virtual int AttributeCode
         {
             get { return m_attribCode; }
             set
@@ -172,7 +173,7 @@ namespace CollisionEditor
 
         private int m_groundCode;
 
-        public int GroundCode
+        public virtual int GroundCode
         {
             get { return m_groundCode; }
             set
@@ -193,7 +194,7 @@ namespace CollisionEditor
 
         private int m_linkNo;
 
-        public int LinkNumber
+        public virtual int LinkNumber
         {
             get { return m_linkNo; }
             set
@@ -214,7 +215,7 @@ namespace CollisionEditor
 
         private int m_specialCode;
 
-        public int SpecialCode
+        public virtual int SpecialCode
         {
             get { return m_specialCode; }
             set
@@ -235,7 +236,7 @@ namespace CollisionEditor
 
         private int m_wallCode;
 
-        public int WallCode
+        public virtual int WallCode
         {
             get { return m_wallCode; }
             set
@@ -260,7 +261,7 @@ namespace CollisionEditor
 
         private int m_camMoveBg;
 
-        public int CamMoveBG
+        public virtual int CamMoveBG
         {
             get { return m_camMoveBg; }
             set
@@ -281,7 +282,7 @@ namespace CollisionEditor
 
         private int m_roomCamID;
 
-        public int RoomCamID
+        public virtual int RoomCamID
         {
             get { return m_roomCamID; }
             set
@@ -302,7 +303,7 @@ namespace CollisionEditor
 
         private int m_roomPathID;
 
-        public int RoomPathID
+        public virtual int RoomPathID
         {
             get { return m_roomPathID; }
 
@@ -321,7 +322,7 @@ namespace CollisionEditor
 
         private int m_roomPathPntNo;
 
-        public int RoomPathPointNo
+        public virtual int RoomPathPointNo
         {
             get { return m_roomPathPntNo; }
             set
@@ -344,7 +345,7 @@ namespace CollisionEditor
 
         private int m_cameraBehavior;
 
-        public int CameraBehavior
+        public virtual int CameraBehavior
         {
             get { return m_cameraBehavior; }
             set
@@ -440,11 +441,22 @@ namespace CollisionEditor
     {
         public ObservableCollection<Triangle> SelectedItems { get; set; }
 
+        private PropertyGrid PropGrid;
+
         public TriangleSelectionViewModel()
         {
             SelectedItems = new ObservableCollection<Triangle>();
 
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+        }
+
+        public TriangleSelectionViewModel(PropertyGrid propGrid)
+        {
+            SelectedItems = new ObservableCollection<Triangle>();
+
+            SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+
+            PropGrid = propGrid;
         }
 
         void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -471,6 +483,34 @@ namespace CollisionEditor
             NotifyPropertyChanged(e.PropertyName);
         }
 
+        public override int AttributeCode
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.AttributeCode))
+                {
+                    return SelectedItems[0].AttributeCode;
+                }
+
+                else
+                {
+                    return -1;
+                }
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.AttributeCode = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
         public override int ExitIndex
         {
             get
@@ -487,6 +527,270 @@ namespace CollisionEditor
                 foreach (Triangle tri in SelectedItems)
                 {
                     tri.ExitIndex = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int GroundCode
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.GroundCode))
+                    return SelectedItems[0].GroundCode;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.GroundCode = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int WallCode
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.WallCode))
+                    return SelectedItems[0].WallCode;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.WallCode = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int LinkNumber
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.LinkNumber))
+                    return SelectedItems[0].LinkNumber;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.LinkNumber = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int SpecialCode
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.SpecialCode))
+                    return SelectedItems[0].SpecialCode;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.SpecialCode = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int RoomCamID
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.CameraID))
+                    return SelectedItems[0].CameraID;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.CameraID = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int CamMoveBG
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.CamMoveBG))
+                    return SelectedItems[0].CamMoveBG;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.CamMoveBG = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int RoomPathID
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.RoomPathID))
+                    return SelectedItems[0].RoomPathID;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.RoomPathID = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int RoomPathPointNo
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.RoomPathPointNo))
+                    return SelectedItems[0].RoomPathPointNo;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.RoomPathPointNo = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int PolyColor
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.PolyColor))
+                    return SelectedItems[0].PolyColor;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.PolyColor = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int SoundID
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.SoundID))
+                    return SelectedItems[0].SoundID;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.SoundID = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int CameraID
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.CameraID))
+                    return SelectedItems[0].CameraID;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.CameraID = value;
+                }
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public override int CameraBehavior
+        {
+            get
+            {
+                if (SelectedItems.Count == 0)
+                    return -1;
+                if (SelectedItems.IsSameValue(i => i.CameraBehavior))
+                    return SelectedItems[0].CameraBehavior;
+                return -1;
+            }
+
+            set
+            {
+                foreach (Triangle tri in SelectedItems)
+                {
+                    tri.CameraBehavior = value;
                 }
 
                 NotifyPropertyChanged();

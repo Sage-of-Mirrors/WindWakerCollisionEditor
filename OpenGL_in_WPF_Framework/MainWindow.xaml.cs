@@ -46,7 +46,7 @@ namespace CollisionEditor
             m_glControl.Dock = System.Windows.Forms.DockStyle.Fill;
             m_glControl.AllowDrop = true;
             m_glControl.BackColor = System.Drawing.Color.Fuchsia;
-            m_viewModel.CreateGraphicsContext(m_glControl, GLHost);
+            m_viewModel.CreateGraphicsContext(m_glControl, GLHost, testPropGrid);
 
             GLHost.Child = m_glControl;
             GLHost.AllowDrop = true;

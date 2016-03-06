@@ -184,6 +184,10 @@ namespace CollisionEditor
             m_rotation = new Vector3();
 
             m_scale = Vector3.One;
+
+            m_selObjBuffer = new List<int>();
+
+            m_notObjBuffer = new List<int>();
         }
 
         public void CreateBufferObjects()

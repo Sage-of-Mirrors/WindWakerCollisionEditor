@@ -90,13 +90,13 @@ namespace CollisionEditor
         //Primary data structure
         private ObservableCollection<Category> m_categories;
 
-        internal void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host)
+        internal void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, PropertyGrid grid)
         {
             m_renderer = new Renderer(ctrl, host);
 
             m_selectedTris = new List<Triangle>();
 
-            SelectedTriangles = new TriangleSelectionViewModel();
+            SelectedTriangles = new TriangleSelectionViewModel(grid);
 
             m_renderer.SelectedTris += m_renderer_SelectedTris;
 
@@ -109,8 +109,8 @@ namespace CollisionEditor
 
         void m_renderer_FocusCamera(object sender, EventArgs e)
         {
-            if (m_selectedTris.Count != 0)
-                FocusCamera(new AABB(m_selectedTris));
+            if (SelectedTriangles.SelectedItems.Count != 0)
+                FocusCamera(new AABB(new List<Triangle>(SelectedTriangles.SelectedItems)));
         }
 
         void m_renderer_RecategorizeTris(object sender, EventArgs e)
@@ -173,6 +173,7 @@ namespace CollisionEditor
                         case "rarc":
                             break;
                         case "dae":
+                            GetDaeData(openFile.FileName);
                             break;
                         case "dzb":
                             using (FileStream stream = new FileStream(openFile.FileName, FileMode.Open))
@@ -208,12 +209,29 @@ namespace CollisionEditor
 
         public void Save()
         {
+            SaveFileDialog saveFile = new SaveFileDialog();
+
+            saveFile.Filter = "DZB files (*.dzb)|*.dzb";
+
+            if (saveFile.ShowDialog() == true)
+            {
+                using (EndianBinaryWriter writer = new EndianBinaryWriter(new FileStream(saveFile.FileName, FileMode.Create), Endian.Big))
+                {
+                    Export(writer);
+                }
+            }
+        }
+
+        private void Export(EndianBinaryWriter writer)
+        {
 
         }
 
         public void Close()
         {
-            m_selectedTris.Clear();
+            SelectedTriangles.SelectedItems.Clear();
+
+            test.Update();
 
             Categories.Clear();
 
@@ -256,9 +274,13 @@ namespace CollisionEditor
 
         }
 
-        private void GetDaeData()
+        private void GetDaeData(string fileName)
         {
+            DAE importedCol = new DAE(fileName);
 
+            Categories = importedCol.GetCategories();
+
+            AddRenderableObjs();
         }
 
         private void GetDzbData(EndianBinaryReader stream)
@@ -267,6 +289,11 @@ namespace CollisionEditor
 
             Categories = nativeCol.GetCategories();
 
+            AddRenderableObjs();
+        }
+
+        private void AddRenderableObjs()
+        {
             foreach (Category cat in Categories)
             {
                 foreach (Group grp in cat.Groups)
@@ -280,9 +307,9 @@ namespace CollisionEditor
 
             bool isAllOneGroup = false;
 
-            Group testGroup = m_selectedTris[0].ParentGroup;
+            Group testGroup = SelectedTriangles.SelectedItems[0].ParentGroup;
 
-            foreach (Triangle tri in m_selectedTris)
+            foreach (Triangle tri in SelectedTriangles.SelectedItems)
             {
                 if (tri.ParentGroup != testGroup)
                 {
@@ -293,7 +320,7 @@ namespace CollisionEditor
                 isAllOneGroup = true;
             }
 
-            foreach (Triangle tri in m_selectedTris)
+            foreach (Triangle tri in SelectedTriangles.SelectedItems)
             {
                 tri.ParentGroup.Triangles.Remove(tri);
 
@@ -330,7 +357,7 @@ namespace CollisionEditor
         {
             Group newGroup = new Group();
 
-            foreach (Triangle tri in m_selectedTris)
+            foreach (Triangle tri in SelectedTriangles.SelectedItems)
             {
                 tri.ParentGroup.Triangles.Remove(tri);
 

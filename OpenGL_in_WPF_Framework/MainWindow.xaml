@@ -58,6 +58,20 @@
                 <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" IsCategorized="False" DockPanel.Dock="Bottom" Margin="0,11,6,0" RenderTransformOrigin="0.5,0.5" Width="201" Height="344" VerticalAlignment="Top">
                     <xctk:PropertyGrid.PropertyDefinitions>
                         <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="PolyColor" DisplayName="Poly Color" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="CameraID" DisplayName="Camera ID" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="GroundCode" DisplayName="Ground Code" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="WallCode" DisplayName="Wall Code" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="SpecialCode" DisplayName="Special Code" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="AttributeCode" DisplayName="Attribute Code" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="CameraBehavior" DisplayName="Camera Behavior" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomCamID" DisplayName="Room Camera ID" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathID" DisplayName="Path Index" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathPointNo" DisplayName="Path Point Index" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="LinkNumber" DisplayName="Link Number" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="CamMovBG" DisplayName="Cam Move BG" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="ParentGroup" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="IsSelected" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="SelectedItems" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="Vertex1" IsBrowsable="False"/>
