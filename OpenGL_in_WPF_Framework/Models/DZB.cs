@@ -119,6 +119,10 @@ namespace CollisionEditor
                         {
                             geo.GroupCategory = cat;
 
+                            cat.Terrain = geo.Terrain;
+
+                            cat.RoomNumber = geo.RoomNumber;
+
                             cat.Groups.Add(geo);
                         }
                     }

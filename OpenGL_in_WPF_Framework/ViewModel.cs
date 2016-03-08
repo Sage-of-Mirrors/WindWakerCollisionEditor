@@ -64,6 +64,23 @@ namespace CollisionEditor
 
         private Group m_selectedGroup;
 
+        public Category SelectedCategory
+        {
+            get { return m_selectedCategory; }
+
+            set
+            {
+                if (value != m_selectedCategory)
+                {
+                    m_selectedCategory = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private Category m_selectedCategory;
+
         public ObservableCollection<Category> Categories
         {
             get { return m_categories; }
@@ -268,7 +285,7 @@ namespace CollisionEditor
             {
                 Group grp = e.NewValue as Group;
 
-                SelectedGroup = grp;
+                //SelectedGroup = grp;
 
                 SelectTriangleEventArgs args = new SelectTriangleEventArgs();
 
@@ -277,8 +294,13 @@ namespace CollisionEditor
                 m_renderer_SelectedTris(this, args);
             }
 
+            if ((e.NewValue != null) && (e.NewValue.GetType() == typeof(Category)))
+            {
+                SelectedCategory = (Category)e.NewValue;
+            }
+
             else
-                SelectedGroup = null;
+                SelectedCategory = null;
         }
 
         private void GetArcData()

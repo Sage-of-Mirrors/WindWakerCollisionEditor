@@ -99,9 +99,9 @@ namespace CollisionEditor
 
             Unknown3 = 0;
 
-            TerrainType = 0;
+            TerrainType = (byte)cat.Terrain;
 
-            RoomNumber = 0;
+            RoomNumber = (byte)RoomNumber;
         }
 
         /// <summary>
@@ -132,9 +132,9 @@ namespace CollisionEditor
 
             Unknown3 = 0;
 
-            TerrainType = (byte)grp.Terrain;
+            TerrainType = (byte)grp.GroupCategory.Terrain;
 
-            RoomNumber = (byte)grp.RoomNumber;
+            RoomNumber = (byte)grp.GroupCategory.RoomNumber;
         }
 
         /// <summary>

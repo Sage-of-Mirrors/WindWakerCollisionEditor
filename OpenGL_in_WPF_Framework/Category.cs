@@ -79,5 +79,37 @@ namespace CollisionEditor
 
             stream.BaseStream.Position = streamStart + 0x34;
         }
+
+        public TerrainType Terrain
+        {
+            get { return m_terrain; }
+            set
+            {
+                if (value != m_terrain)
+                {
+                    m_terrain = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private TerrainType m_terrain;
+
+        private int m_roomNumber;
+
+        public int RoomNumber
+        {
+            get { return m_roomNumber; }
+            set
+            {
+                if (value != m_roomNumber)
+                {
+                    m_roomNumber = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
     }
 }

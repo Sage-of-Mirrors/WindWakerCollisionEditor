@@ -88,9 +88,9 @@
             <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="75" VerticalAlignment="Bottom">
                 <Label Content="Terrain Type:" Margin="3,7,0,40" Height="28" HorizontalAlignment="Left"/>
                 <Label Content="Room Number:" Margin="3,40,0,1" HorizontalAlignment="Left" Width="95" Height="34"/>
-                <ComboBox Margin="98,10,0,42" SelectedValue="{Binding SelectedGroup.Terrain}" 
-					SelectedValuePath="{Binding Terrain}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
-                <TextBox Margin="98,41,0,10" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedGroup.RoomNumber}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}"/>
+                <ComboBox Margin="98,10,0,42" SelectedValue="{Binding SelectedCategory.Terrain}" 
+					SelectedValuePath="{Binding Terrain}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
+                <TextBox Margin="98,41,0,10" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
             </Grid>
         </DockPanel>
     </Grid>
