@@ -365,5 +365,126 @@ namespace CollisionEditor
 
             m_cameraBehavior = reader.ReadInt32();
         }
+
+        public Property(Triangle tri)
+        {
+            m_attribCode = tri.AttributeCode;
+
+            m_cameraBehavior = tri.CameraBehavior;
+
+            m_camID = tri.CameraID;
+
+            m_camMoveBg = tri.CamMoveBG;
+
+            m_exitID = tri.ExitIndex;
+
+            m_groundCode = tri.GroundCode;
+
+            m_linkNo = tri.LinkNumber;
+
+            m_polyColor = tri.PolyColor;
+
+            m_roomCamID = tri.RoomCamID;
+
+            m_roomPathID = tri.RoomPathID;
+
+            m_roomPathPntNo = tri.RoomPathPointNo;
+
+            m_soundID = tri.SoundID;
+
+            m_specialCode = tri.SpecialCode;
+
+            m_wallCode = tri.WallCode;
+        }
+
+        public void Write(EndianBinaryWriter propWriter)
+        {
+            int bitfield1 = (m_camID) | (m_soundID << 8) | (m_exitID << 0xD) | (m_polyColor << 0x13);
+
+            propWriter.Write(bitfield1);
+
+            int bitfield2 = (m_linkNo) | (m_wallCode << 8) | (m_specialCode << 0x0C) | (m_attribCode << 0x10) 
+                | (m_groundCode << 0x15);
+
+            propWriter.Write(bitfield2);
+
+            int bitfield3 = (m_camMoveBg) | (m_roomCamID << 0x8) | (m_roomPathID << 0x10) | (m_roomPathPntNo << 0x18);
+
+            propWriter.Write(bitfield3);
+
+            propWriter.Write(CameraBehavior);
+        }
+
+        public bool Compare(Property comparison)
+        {
+            bool isSame = false;
+
+            if ((m_attribCode == comparison.AttributeCode) && (m_cameraBehavior == comparison.CameraBehavior) &&
+                (m_camID == comparison.CameraID) && (m_camMoveBg == comparison.CamMoveBG) && (m_exitID == comparison.ExitIndex)
+                && (m_groundCode == comparison.GroundCode) && (m_linkNo == comparison.LinkNumber) &&
+                (m_polyColor == comparison.PolyColor) && (m_roomCamID == comparison.RoomCamID) && (m_roomPathID == comparison.RoomPathID)
+                && (m_roomPathPntNo == comparison.RoomPathPointNo) && (m_soundID == comparison.SoundID) &&
+                (m_specialCode == comparison.SpecialCode) && (m_wallCode == comparison.WallCode))
+                return true;
+
+            return isSame;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() == typeof(Property))
+            {
+                Property comparison = obj as Property;
+
+                if ((m_attribCode == comparison.AttributeCode) && (m_cameraBehavior == comparison.CameraBehavior) &&
+                    (m_camID == comparison.CameraID) && (m_camMoveBg == comparison.CamMoveBG) && (m_exitID == comparison.ExitIndex)
+                    && (m_groundCode == comparison.GroundCode) && (m_linkNo == comparison.LinkNumber) &&
+                    (m_polyColor == comparison.PolyColor) && (m_roomCamID == comparison.RoomCamID) && (m_roomPathID == comparison.RoomPathID)
+                    && (m_roomPathPntNo == comparison.RoomPathPointNo) && (m_soundID == comparison.SoundID) &&
+                    (m_specialCode == comparison.SpecialCode) && (m_wallCode == comparison.WallCode))
+                    return true;
+            }
+
+            return base.Equals(obj);
+        }
+
+        public static bool operator ==(Property prop1, Property prop2)
+        {
+            if (System.Object.ReferenceEquals(prop1, prop2))
+            {
+                return true;
+            }
+
+            if ((prop1.m_attribCode == prop2.AttributeCode) && (prop1.m_cameraBehavior == prop2.CameraBehavior) &&
+                (prop1.m_camID == prop2.CameraID) && (prop1.m_camMoveBg == prop2.CamMoveBG) && (prop1.m_exitID == prop2.ExitIndex)
+                && (prop1.m_groundCode == prop2.GroundCode) && (prop1.m_linkNo == prop2.LinkNumber) &&
+                (prop1.m_polyColor == prop2.PolyColor) && (prop1.m_roomCamID == prop2.RoomCamID) && (prop1.m_roomPathID == prop2.RoomPathID)
+                && (prop1.m_roomPathPntNo == prop2.RoomPathPointNo) && (prop1.m_soundID == prop2.SoundID) &&
+                (prop1.m_specialCode == prop2.SpecialCode) && (prop1.m_wallCode == prop2.WallCode))
+                return true;
+
+            return false;
+        }
+
+        public static bool operator !=(Property prop1, Property prop2)
+        {
+            if (System.Object.ReferenceEquals(prop1, prop2))
+            {
+                return true;
+            }
+
+            if ((prop1.m_attribCode == prop2.AttributeCode) && (prop1.m_cameraBehavior == prop2.CameraBehavior) &&
+                (prop1.m_camID == prop2.CameraID) && (prop1.m_camMoveBg == prop2.CamMoveBG) && (prop1.m_exitID == prop2.ExitIndex)
+                && (prop1.m_groundCode == prop2.GroundCode) && (prop1.m_linkNo == prop2.LinkNumber) &&
+                (prop1.m_polyColor == prop2.PolyColor) && (prop1.m_roomCamID == prop2.RoomCamID) && (prop1.m_roomPathID == prop2.RoomPathID)
+                && (prop1.m_roomPathPntNo == prop2.RoomPathPointNo) && (prop1.m_soundID == prop2.SoundID) &&
+                (prop1.m_specialCode == prop2.SpecialCode) && (prop1.m_wallCode == prop2.WallCode))
+                return false;
+
+            return true;
+        }
     }
 }

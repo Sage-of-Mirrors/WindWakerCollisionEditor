@@ -24,6 +24,23 @@ namespace CollisionEditor
             Center = new Vector3();
         }
 
+        public AABB(Vector3 min, Vector3 max)
+        {
+            Min = min;
+
+            Max = max;
+
+            Center.X = (Max.X + Min.X) / 2;
+
+            Center.Y = (Max.Y + Min.Y) / 2;
+
+            Center.Z = (Max.Z + Min.Z) / 2;
+
+            //Min -= Center;
+
+            //Max -= Center;
+        }
+
         public AABB(List<Triangle> triList)
         {
             float maxX = float.MinValue;
@@ -113,15 +130,113 @@ namespace CollisionEditor
 
             Center.Z = (Max.Z + Min.Z) / 2;
 
-            Max -= Center;
+            //Max -= Center;
 
-            Min -= Center;
+            //Min -= Center;
 
             Console.WriteLine("Min: (" + Min.X + ", " + Min.Y + ", " + Min.Z + ")");
 
             Console.WriteLine("Max: (" + Max.X + ", " + Max.Y + ", " + Max.Z + ")");
 
             Console.WriteLine("Center: (" + Center.X + ", " + Center.Y + ", " + Center.Z + ")");
+        }
+
+        public bool Contains(Vector3 point)
+        {
+            Vector3 realMin = Min; //+ Center;
+            Vector3 realMax = Max; //+ Center;
+
+            Vector3 realpoint = point - Center;
+
+            //Console.WriteLine("Max:" + Max + ", Min:" + Min + ", Tri center:" + point);
+
+            if ((point.X >= realMin.X) && (point.X <= realMax.X))
+            {
+                if ((point.Y >= realMin.Y) && (point.Y <= realMax.Y))
+                {
+                    if ((point.Z >= realMin.Z) && (point.Z <= realMax.Z))
+                    {
+                        //Console.WriteLine("passed");
+                        return true;
+                    }
+                }
+            }
+            //Console.WriteLine("failed");
+            return false;
+        }
+
+        public List<AABB> OctantSubdivide(AABB octantBoundingBox)
+        {
+            List<AABB> subdividedBox = new List<AABB>();
+
+            Vector3 middleCoords = new Vector3((octantBoundingBox.Max.X + octantBoundingBox.Min.X) / 2,
+                (octantBoundingBox.Max.Y + octantBoundingBox.Min.Y) / 2, (octantBoundingBox.Max.Z + octantBoundingBox.Min.Z) / 2);
+
+            Vector3 oct2Max = new Vector3(middleCoords.X, middleCoords.Y, middleCoords.Z);
+
+            Vector3 oct2Min = new Vector3(octantBoundingBox.Min.X, octantBoundingBox.Min.Y, octantBoundingBox.Min.Z);
+
+            AABB oct2 = new AABB(oct2Min, oct2Max);
+
+            subdividedBox.Add(oct2);
+
+            Vector3 oct1Max = new Vector3(octantBoundingBox.Max.X, middleCoords.Y, middleCoords.Z);
+
+            Vector3 oct1Min = new Vector3(middleCoords.X, octantBoundingBox.Min.Y, octantBoundingBox.Min.Z);
+
+            AABB oct1 = new AABB(oct1Min, oct1Max);
+
+            subdividedBox.Add(oct1);
+
+            Vector3 oct6Max = new Vector3(middleCoords.X, octantBoundingBox.Max.Y, middleCoords.Z);
+
+            Vector3 oct6Min = new Vector3(octantBoundingBox.Min.X, middleCoords.Y, octantBoundingBox.Min.Z);
+
+            AABB oct6 = new AABB(oct6Min, oct6Max);
+
+            subdividedBox.Add(oct6);
+
+            Vector3 oct5Max = new Vector3(octantBoundingBox.Max.X, octantBoundingBox.Max.Y, middleCoords.Z);
+
+            Vector3 oct5Min = new Vector3(middleCoords.X, middleCoords.Y, octantBoundingBox.Min.Z);
+
+            AABB oct5 = new AABB(oct5Min, oct5Max);
+
+            subdividedBox.Add(oct5);
+
+            Vector3 oct8Max = new Vector3(middleCoords.X, octantBoundingBox.Max.Y, octantBoundingBox.Max.Z);
+
+            Vector3 oct8Min = new Vector3(octantBoundingBox.Min.X, middleCoords.Y, middleCoords.Z);
+
+            AABB oct8 = new AABB(oct8Min, oct8Max);
+
+            subdividedBox.Add(oct8);
+
+            Vector3 oct7Max = new Vector3(octantBoundingBox.Max.X, octantBoundingBox.Max.Y, octantBoundingBox.Max.Z);
+
+            Vector3 oct7Min = new Vector3(middleCoords.X, middleCoords.Y, middleCoords.Z);
+
+            AABB oct7 = new AABB(oct7Min, oct7Max);
+
+            subdividedBox.Add(oct7);
+
+            Vector3 oct4Max = new Vector3(middleCoords.X, middleCoords.Y, octantBoundingBox.Max.Z);
+
+            Vector3 oct4Min = new Vector3(octantBoundingBox.Min.X, octantBoundingBox.Min.Y, middleCoords.Z);
+
+            AABB oct4 = new AABB(oct4Min, oct4Max);
+
+            subdividedBox.Add(oct4);
+
+            Vector3 oct3Max = new Vector3(octantBoundingBox.Max.X, middleCoords.Y, octantBoundingBox.Max.Z);
+
+            Vector3 oct3Min = new Vector3(middleCoords.X, octantBoundingBox.Min.Y, middleCoords.Z);
+
+            AABB oct3 = new AABB(oct3Min, oct3Max);
+
+            subdividedBox.Add(oct3);
+
+            return subdividedBox;
         }
     }
 }

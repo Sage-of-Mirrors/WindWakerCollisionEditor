@@ -215,16 +215,28 @@ namespace CollisionEditor
 
             if (saveFile.ShowDialog() == true)
             {
-                using (EndianBinaryWriter writer = new EndianBinaryWriter(new FileStream(saveFile.FileName, FileMode.Create), Endian.Big))
+                try
                 {
-                    Export(writer);
+                    using (EndianBinaryWriter writer = new EndianBinaryWriter(new FileStream(saveFile.FileName, FileMode.Create), Endian.Big))
+                    {
+                        Export(writer, saveFile.SafeFileName.Split('.')[0]);
+                    }
+
+                    MessageBox.Show("Export successful!", "Export complete");
+                }
+
+                catch
+                {
+                    MessageBox.Show("Something went wrong. Please open an Issue on Sage-of-Mirrors' Github!", "Uh-oh. :(");
                 }
             }
         }
 
-        private void Export(EndianBinaryWriter writer)
+        private void Export(EndianBinaryWriter writer, string fileName)
         {
+            DZBExporter expo = new DZBExporter(new List<Category>(Categories), fileName);
 
+            expo.Export(writer);
         }
 
         public void Close()

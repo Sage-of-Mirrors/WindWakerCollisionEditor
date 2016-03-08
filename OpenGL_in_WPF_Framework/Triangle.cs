@@ -435,6 +435,14 @@ namespace CollisionEditor
 
             m_cameraBehavior = prop.CameraBehavior;
         }
+
+        public Vector3 GetCenter()
+        {
+            return new Vector3(
+                (Vertex1.X + Vertex2.X + Vertex3.X) / 3,
+                (Vertex1.Y + Vertex2.Y + Vertex3.Y) / 3,
+                (Vertex1.Z + Vertex2.Z + Vertex3.Z) / 3);
+        }
     }
 
     public class TriangleSelectionViewModel : Triangle

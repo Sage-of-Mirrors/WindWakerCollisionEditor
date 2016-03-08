@@ -11,9 +11,4 @@ namespace CollisionEditor
     {
         void Render(int _uniformMVP, int _uniformColor, Matrix4 viewMatrix, Matrix4 projMatrix);
     }
-
-    interface IPickable
-    {
-        bool IsRayColliding(Vector3 eye, Vector3 ray);
-    }
 }
