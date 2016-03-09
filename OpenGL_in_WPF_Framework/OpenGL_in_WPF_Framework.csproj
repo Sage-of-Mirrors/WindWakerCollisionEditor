@@ -80,6 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="AABB.cs" />
     <Compile Include="Octet.cs" />
+    <Compile Include="Property Enums\AttributeCode.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Collada Tool\Collada_B_Rep\Curves\Grendgine_Collada_Circle.cs" />

@@ -6,7 +6,7 @@
         xmlns:loc="clr-namespace:CollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="CollisionEditor.MainWindow"
-        Title="MainWindow" Height="600" Width="1000" MouseRightButtonUp="Window_MouseRightButtonUp">
+        Title="MainWindow" Height="600" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.DataContext>
         <loc:ViewModel/>
     </Window.DataContext>
@@ -21,8 +21,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="210"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="212"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="278"/>
         </Grid.ColumnDefinitions>
         <DockPanel Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <Menu Margin="0,0,0,0" Height="20" DockPanel.Dock="Top">
@@ -41,7 +41,7 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <DockPanel LastChildFill="True" Margin="0,20,0,75" Width="210" HorizontalAlignment="Left" Grid.RowSpan="2">
+        <DockPanel LastChildFill="True" Margin="0,20,0,75" Width="210" HorizontalAlignment="Left">
             <TreeView x:Name="treeView" Width="210" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Categories}">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type loc:Category}" ItemsSource="{Binding Groups}">
@@ -53,9 +53,9 @@
                 </TreeView.ItemTemplate>
             </TreeView>
         </DockPanel>
-        <DockPanel LastChildFill="False" Margin="0,8,0,10" Grid.Column="2">
+        <DockPanel LastChildFill="True" Margin="0,8,0,10" Grid.Column="2">
             <Grid DockPanel.Dock="Right" Margin="0,1,0,0">
-                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" IsCategorized="False" DockPanel.Dock="Bottom" Margin="0,11,6,0" RenderTransformOrigin="0.5,0.5" Width="201" Height="344" VerticalAlignment="Top">
+                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" IsCategorized="False" DockPanel.Dock="Bottom" Margin="8,15,7,192" RenderTransformOrigin="0.5,0.5" Height="344" VerticalAlignment="Top">
                     <xctk:PropertyGrid.PropertyDefinitions>
                         <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit" IsExpandable="False"/>
                         <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound" IsExpandable="False"/>
@@ -84,7 +84,7 @@
         <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1">
             <WindowsFormsHost x:Name="GLHost" Background="{x:Null}" DockPanel.Dock="Bottom" Initialized="GLHost_Initialized" Foreground="{x:Null}"/>
         </DockPanel>
-        <DockPanel LastChildFill="True" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75">
+        <DockPanel LastChildFill="True" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75">
             <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="75" VerticalAlignment="Bottom">
                 <Label Content="Terrain Type:" Margin="3,7,0,40" Height="28" HorizontalAlignment="Left"/>
                 <Label Content="Room Number:" Margin="3,40,0,1" HorizontalAlignment="Left" Width="95" Height="34"/>

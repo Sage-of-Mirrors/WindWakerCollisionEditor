@@ -150,10 +150,26 @@ namespace CollisionEditor
         #region Bitfield 2
 
         #region Attribute Code
-
+        /*
         private int m_attribCode;
 
         public virtual int AttributeCode
+        {
+            get { return m_attribCode; }
+            set
+            {
+                if (value != m_attribCode)
+                {
+                    m_attribCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }*/
+
+        private AttributeCode m_attribCode;
+
+        public virtual AttributeCode AttributeCode
         {
             get { return m_attribCode; }
             set
@@ -491,12 +507,12 @@ namespace CollisionEditor
             NotifyPropertyChanged(e.PropertyName);
         }
 
-        public override int AttributeCode
+        public override AttributeCode AttributeCode
         {
             get
             {
                 if (SelectedItems.Count == 0)
-                    return -1;
+                    return AttributeCode.None;
                 if (SelectedItems.IsSameValue(i => i.AttributeCode))
                 {
                     return SelectedItems[0].AttributeCode;
@@ -504,7 +520,7 @@ namespace CollisionEditor
 
                 else
                 {
-                    return -1;
+                    return AttributeCode.Multi;
                 }
             }
 

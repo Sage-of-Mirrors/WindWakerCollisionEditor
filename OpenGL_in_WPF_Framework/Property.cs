@@ -122,13 +122,29 @@ namespace CollisionEditor
         #region Bitfield 2
 
         #region Attribute Code
-
+        /*
         private int m_attribCode;
 
         public int AttributeCode
         {
             get { return m_attribCode; }
             set 
+            {
+                if (value != m_attribCode)
+                {
+                    m_attribCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }*/
+
+        private AttributeCode m_attribCode;
+
+        public virtual AttributeCode AttributeCode
+        {
+            get { return m_attribCode; }
+            set
             {
                 if (value != m_attribCode)
                 {
@@ -353,7 +369,7 @@ namespace CollisionEditor
             m_linkNo = (bitField2 & 0xFF);
             m_wallCode = (bitField2 & 0xF00) >> 0x08;
             m_specialCode = (bitField2 & 0xF000) >> 0x0C;
-            m_attribCode = (bitField2 & 0x1F0000) >> 0x10;
+            m_attribCode = (AttributeCode)((bitField2 & 0x1F0000) >> 0x10);
             m_groundCode = (bitField2 & 0x3E00000) >> 0x15;
 
             int bitField3 = reader.ReadInt32();
@@ -403,7 +419,7 @@ namespace CollisionEditor
 
             propWriter.Write(bitfield1);
 
-            int bitfield2 = (m_linkNo) | (m_wallCode << 8) | (m_specialCode << 0x0C) | (m_attribCode << 0x10) 
+            int bitfield2 = (m_linkNo) | (m_wallCode << 8) | (m_specialCode << 0x0C) | ((int)m_attribCode << 0x10) 
                 | (m_groundCode << 0x15);
 
             propWriter.Write(bitfield2);
