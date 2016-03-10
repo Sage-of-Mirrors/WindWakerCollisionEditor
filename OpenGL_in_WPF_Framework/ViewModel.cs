@@ -47,6 +47,22 @@ namespace CollisionEditor
 
         public PropertyGrid test;
 
+        private Camera m_cam;
+
+        public Camera Cam
+        {
+            get { return m_cam; }
+            set
+            {
+                if (value != m_cam)
+                {
+                    m_cam = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public Group SelectedGroup
         {
             get { return m_selectedGroup; }
@@ -122,6 +138,8 @@ namespace CollisionEditor
             m_renderer.RecategorizeTris += m_renderer_RecategorizeTris;
 
             m_renderer.FocusCamera += m_renderer_FocusCamera;
+
+            Cam = m_renderer.GetCamera();
         }
 
         void m_renderer_FocusCamera(object sender, EventArgs e)
@@ -259,6 +277,8 @@ namespace CollisionEditor
         public void Close()
         {
             SelectedTriangles.SelectedItems.Clear();
+
+            SelectedTriangles.HasSelection = false;
 
             test.Update();
 
@@ -667,6 +687,23 @@ namespace CollisionEditor
 
         #endregion
 
+        private void DisplayAboutWindow()
+        {
+            AboutBox about = new AboutBox();
+
+            about.Show();
+        }
+
+        private void ReportBug()
+        {
+            System.Diagnostics.Process.Start("https://github.com/Sage-of-Mirrors/DZBCollisionEditor/issues");
+        }
+
+        private void OpenWiki()
+        {
+            System.Diagnostics.Process.Start("https://github.com/Sage-of-Mirrors/DZBCollisionEditor/wiki");
+        }
+
         #region Command Callbacks
 
         /// <summary> The user has requested to open a new map, ask which map and then unload current if needed. </summary>
@@ -723,6 +760,24 @@ namespace CollisionEditor
             get { return new RelayCommand(x => Application.Current.MainWindow.Close()); }
         }
 
+        /// <summary> The user has pressed Alt + F4, chosen Exit from the File menu, or clicked the close button. </summary>
+        public ICommand OnRequestDisplayAbout
+        {
+            get { return new RelayCommand(x => DisplayAboutWindow()); }
+        }
+
+        /// <summary> The user has pressed Alt + F4, chosen Exit from the File menu, or clicked the close button. </summary>
+        public ICommand OnRequestReportBug
+        {
+            get { return new RelayCommand(x => ReportBug()); }
+        }
+
+        /// <summary> The user has pressed Alt + F4, chosen Exit from the File menu, or clicked the close button. </summary>
+        public ICommand OnRequestOpenWiki
+        {
+            get { return new RelayCommand(x => OpenWiki()); }
+        }
+
         public IEnumerable<TerrainType> TerrainTypeValues
         {
             get
@@ -740,6 +795,27 @@ namespace CollisionEditor
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value != null;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+          object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ZeroToFalseConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value.GetType() == typeof(ObservableCollection<Triangle>))
+            {
+                ObservableCollection<Triangle> forCount = value as ObservableCollection<Triangle>;
+
+                return forCount.Count != 0;
+            }
+
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType,

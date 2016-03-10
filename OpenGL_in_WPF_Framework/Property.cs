@@ -73,12 +73,12 @@ namespace CollisionEditor
 
         #region SoundID
 
-        private int m_soundID;
+        private SoundID m_soundID;
 
         /// <summary>
         /// The sound that plays when an actor walks across the face.
         /// </summary>
-        public int SoundID
+        public SoundID SoundID
         {
             get { return m_soundID; }
             set 
@@ -159,6 +159,7 @@ namespace CollisionEditor
 
         #region Ground Code
 
+        /*
         private int m_groundCode;
 
         public int GroundCode
@@ -173,8 +174,23 @@ namespace CollisionEditor
                     NotifyPropertyChanged();
                 }
             }
+        }*/
+
+        private GroundCode m_groundCode;
+
+        public virtual GroundCode GroundCode
+        {
+            get { return m_groundCode; }
+            set
+            {
+                if (value != m_groundCode)
+                {
+                    m_groundCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
         }
-        
 
         #endregion
 
@@ -201,13 +217,13 @@ namespace CollisionEditor
 
         #region Special Code
 
-        private int m_specialCode;
+        private SpecialCode m_specialCode;
 
-        public int SpecialCode
+        public virtual SpecialCode SpecialCode
         {
             get { return m_specialCode; }
-            set 
-            { 
+            set
+            {
                 if (value != m_specialCode)
                 {
                     m_specialCode = value;
@@ -222,6 +238,7 @@ namespace CollisionEditor
 
         #region Wall Code
 
+        /*
         private int m_wallCode;
 
         public int WallCode
@@ -229,6 +246,22 @@ namespace CollisionEditor
             get { return m_wallCode; }
             set 
             { 
+                if (value != m_wallCode)
+                {
+                    m_wallCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }*/
+
+        private WallCode m_wallCode;
+
+        public WallCode WallCode
+        {
+            get { return m_wallCode; }
+            set
+            {
                 if (value != m_wallCode)
                 {
                     m_wallCode = value;
@@ -360,17 +393,17 @@ namespace CollisionEditor
             int bitField1 = reader.ReadInt32();
 
             m_camID = (bitField1 & 0xFF);
-            m_soundID = (bitField1 & 0x1F00) >> 0x08;
+            m_soundID = (SoundID)((bitField1 & 0x1F00) >> 0x08);
             m_exitID = (bitField1 & 0x7E000) >> 0x0D;
             m_polyColor = (bitField1 & 0x7F80000) >> 0x13;
 
             int bitField2 = reader.ReadInt32();
 
             m_linkNo = (bitField2 & 0xFF);
-            m_wallCode = (bitField2 & 0xF00) >> 0x08;
-            m_specialCode = (bitField2 & 0xF000) >> 0x0C;
+            m_wallCode = (WallCode)((bitField2 & 0xF00) >> 0x08);
+            m_specialCode = (SpecialCode)((bitField2 & 0xF000) >> 0x0C);
             m_attribCode = (AttributeCode)((bitField2 & 0x1F0000) >> 0x10);
-            m_groundCode = (bitField2 & 0x3E00000) >> 0x15;
+            m_groundCode = (GroundCode)((bitField2 & 0x3E00000) >> 0x15);
 
             int bitField3 = reader.ReadInt32();
 
@@ -415,12 +448,12 @@ namespace CollisionEditor
 
         public void Write(EndianBinaryWriter propWriter)
         {
-            int bitfield1 = (m_camID) | (m_soundID << 8) | (m_exitID << 0xD) | (m_polyColor << 0x13);
+            int bitfield1 = (m_camID) | ((int)m_soundID << 8) | (m_exitID << 0xD) | (m_polyColor << 0x13);
 
             propWriter.Write(bitfield1);
 
-            int bitfield2 = (m_linkNo) | (m_wallCode << 8) | (m_specialCode << 0x0C) | ((int)m_attribCode << 0x10) 
-                | (m_groundCode << 0x15);
+            int bitfield2 = (m_linkNo) | ((int)m_wallCode << 8) | ((int)m_specialCode << 0x0C) | ((int)m_attribCode << 0x10) 
+                | ((int)m_groundCode << 0x15);
 
             propWriter.Write(bitfield2);
 

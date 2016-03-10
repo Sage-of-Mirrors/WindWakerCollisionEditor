@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace OpenGL_in_WPF_Framework.Interfaces
+namespace CollisionEditor.Interfaces
 {
     interface IPickable
     {

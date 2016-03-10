@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Diagnostics;
 using OpenTK;
@@ -10,8 +12,34 @@ using OpenTK.Graphics;
 
 namespace CollisionEditor
 {
-    public class Camera
+    public class Camera : INotifyPropertyChanged
     {
+        #region NotifyPropertyChanged overhead
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        private float m_moveSpeed = 5000.0f;
+
+        public float MoveSpeed { get { return m_moveSpeed; } 
+            set
+            {
+                if (value != m_moveSpeed)
+                {
+                    m_moveSpeed = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public Matrix4 ViewMatrix
         {
             get { return Matrix4.LookAt(eye, target, Vector3.UnitY); }
@@ -49,8 +77,6 @@ namespace CollisionEditor
             m_deltaTime = m_time.ElapsedMilliseconds / 1000f;
 
             m_time.Restart();
-
-            float MoveSpeed = 300f;
 
             Vector3 moveDir = Vector3.Zero;
 

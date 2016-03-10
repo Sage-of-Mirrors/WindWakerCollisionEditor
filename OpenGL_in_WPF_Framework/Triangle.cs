@@ -101,12 +101,12 @@ namespace CollisionEditor
 
         #region SoundID
 
-        private int m_soundID;
+        private SoundID m_soundID;
 
         /// <summary>
         /// The sound that plays when an actor walks across the face.
         /// </summary>
-        public virtual int SoundID
+        public virtual SoundID SoundID
         {
             get { return m_soundID; }
             set
@@ -187,9 +187,26 @@ namespace CollisionEditor
 
         #region Ground Code
 
+        /*
         private int m_groundCode;
 
         public virtual int GroundCode
+        {
+            get { return m_groundCode; }
+            set
+            {
+                if (value != m_groundCode)
+                {
+                    m_groundCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }*/
+
+        private GroundCode m_groundCode;
+
+        public virtual GroundCode GroundCode
         {
             get { return m_groundCode; }
             set
@@ -229,9 +246,9 @@ namespace CollisionEditor
 
         #region Special Code
 
-        private int m_specialCode;
+        private SpecialCode m_specialCode;
 
-        public virtual int SpecialCode
+        public virtual SpecialCode SpecialCode
         {
             get { return m_specialCode; }
             set
@@ -250,9 +267,26 @@ namespace CollisionEditor
 
         #region Wall Code
 
+        /*
         private int m_wallCode;
 
-        public virtual int WallCode
+        public int WallCode
+        {
+            get { return m_wallCode; }
+            set 
+            { 
+                if (value != m_wallCode)
+                {
+                    m_wallCode = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }*/
+
+        private WallCode m_wallCode;
+
+        public virtual WallCode WallCode
         {
             get { return m_wallCode; }
             set
@@ -467,6 +501,23 @@ namespace CollisionEditor
 
         private PropertyGrid PropGrid;
 
+        private bool m_hasSelection;
+
+        public bool HasSelection
+        {
+            get { return m_hasSelection; }
+
+            set
+            {
+                if (value != m_hasSelection)
+                {
+                    m_hasSelection = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public TriangleSelectionViewModel()
         {
             SelectedItems = new ObservableCollection<Triangle>();
@@ -487,6 +538,8 @@ namespace CollisionEditor
         {
                 if (e.NewItems != null)
                 {
+                    HasSelection = true;
+
                     foreach (Triangle tri in e.NewItems)
                     {
                         tri.PropertyChanged += Item_PropertyChanged;
@@ -557,15 +610,15 @@ namespace CollisionEditor
             }
         }
 
-        public override int GroundCode
+        public override GroundCode GroundCode
         {
             get
             {
                 if (SelectedItems.Count == 0)
-                    return -1;
+                    return GroundCode.None;
                 if (SelectedItems.IsSameValue(i => i.GroundCode))
                     return SelectedItems[0].GroundCode;
-                return -1;
+                return GroundCode.Multi;
             }
 
             set
@@ -579,15 +632,15 @@ namespace CollisionEditor
             }
         }
 
-        public override int WallCode
+        public override WallCode WallCode
         {
             get
             {
                 if (SelectedItems.Count == 0)
-                    return -1;
+                    return WallCode.None;
                 if (SelectedItems.IsSameValue(i => i.WallCode))
                     return SelectedItems[0].WallCode;
-                return -1;
+                return WallCode.Multi;
             }
 
             set
@@ -623,15 +676,15 @@ namespace CollisionEditor
             }
         }
 
-        public override int SpecialCode
+        public override SpecialCode SpecialCode
         {
             get
             {
                 if (SelectedItems.Count == 0)
-                    return -1;
+                    return SpecialCode.None;
                 if (SelectedItems.IsSameValue(i => i.SpecialCode))
                     return SelectedItems[0].SpecialCode;
-                return -1;
+                return SpecialCode.Multi;
             }
 
             set
@@ -755,15 +808,15 @@ namespace CollisionEditor
             }
         }
 
-        public override int SoundID
+        public override SoundID SoundID
         {
             get
             {
                 if (SelectedItems.Count == 0)
-                    return -1;
+                    return SoundID.None;
                 if (SelectedItems.IsSameValue(i => i.SoundID))
                     return SelectedItems[0].SoundID;
-                return -1;
+                return SoundID.Multi;
             }
 
             set

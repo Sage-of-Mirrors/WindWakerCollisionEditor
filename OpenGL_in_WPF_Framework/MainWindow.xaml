@@ -6,7 +6,7 @@
         xmlns:loc="clr-namespace:CollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="CollisionEditor.MainWindow"
-        Title="MainWindow" Height="600" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
+        Title="MainWindow" Height="621" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.DataContext>
         <loc:ViewModel/>
     </Window.DataContext>
@@ -17,12 +17,13 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
+        <loc:ZeroToFalseConverter x:Key="ZeroToFalseConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="210"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="278"/>
+            <ColumnDefinition Width="303"/>
         </Grid.ColumnDefinitions>
         <DockPanel Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3">
             <Menu Margin="0,0,0,0" Height="20" DockPanel.Dock="Top">
@@ -39,9 +40,14 @@
                     <MenuItem Header="Regroup Triangles" Command="{Binding OnRequestRegroupTris}"/>
                     <MenuItem Header="Recategorize Triangles" Command="{Binding OnRequestRecategorizeTris}"/>
                 </MenuItem>
+                <MenuItem Header="Help">
+                    <MenuItem Header="About" Command="{Binding OnRequestDisplayAbout}"/>
+                    <MenuItem Header="Wiki" Command="{Binding OnRequestOpenWiki}"/>
+                    <MenuItem Header="Report a bug..." Command="{Binding OnRequestReportBug}"/>
+                </MenuItem>
             </Menu>
         </DockPanel>
-        <DockPanel LastChildFill="True" Margin="0,20,0,75" Width="210" HorizontalAlignment="Left">
+        <DockPanel LastChildFill="True" Margin="0,20,0,75" Width="210" HorizontalAlignment="Left" Background="#FFC7C7C7">
             <TreeView x:Name="treeView" Width="210" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Categories}">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type loc:Category}" ItemsSource="{Binding Groups}">
@@ -53,38 +59,42 @@
                 </TreeView.ItemTemplate>
             </TreeView>
         </DockPanel>
-        <DockPanel LastChildFill="True" Margin="0,8,0,10" Grid.Column="2">
-            <Grid DockPanel.Dock="Right" Margin="0,1,0,0">
-                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" IsCategorized="False" DockPanel.Dock="Bottom" Margin="8,15,7,192" RenderTransformOrigin="0.5,0.5" Height="344" VerticalAlignment="Top">
+        <DockPanel LastChildFill="True" Margin="0,19,0,1" Grid.Column="2">
+            <Grid DockPanel.Dock="Right" Margin="0,1,0,0" Background="#FFC7C7C7">
+                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,46" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
                     <xctk:PropertyGrid.PropertyDefinitions>
-                        <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the SCLS entry to use to exit the map. Set this to 63 for no exit."/>
+                        <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound Effects" IsExpandable="False" Category="Collision" Description="The sound to play when Link or another object interacts with the surface."/>
                         <xctk:PropertyDefinition TargetProperties="PolyColor" DisplayName="Poly Color" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="CameraID" DisplayName="Camera ID" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="GroundCode" DisplayName="Ground Code" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="WallCode" DisplayName="Wall Code" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="SpecialCode" DisplayName="Special Code" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="AttributeCode" DisplayName="Attribute Code" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="CameraBehavior" DisplayName="Camera Behavior" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomCamID" DisplayName="Room Camera ID" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomPathID" DisplayName="Path Index" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomPathPointNo" DisplayName="Path Point Index" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="CameraID" DisplayName="Camera ID" IsExpandable="False" Category="Camera"/>
+                        <xctk:PropertyDefinition TargetProperties="GroundCode" DisplayName="Ground Type" IsExpandable="False" Category="Collision"/>
+                        <xctk:PropertyDefinition TargetProperties="WallCode" DisplayName="Wall Type" IsExpandable="False" Category="Collision"/>
+                        <xctk:PropertyDefinition TargetProperties="SpecialCode" DisplayName="Special Type" IsExpandable="False" Category="Collision"/>
+                        <xctk:PropertyDefinition TargetProperties="AttributeCode" DisplayName="Attribute Type" IsExpandable="False" Category="Collision"/>
+                        <xctk:PropertyDefinition TargetProperties="CameraBehavior" DisplayName="Camera Behavior" IsExpandable="False" Category="Camera"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomCamID" DisplayName="Room Camera ID" IsExpandable="False" Category="Camera"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathID" DisplayName="Path Index" IsExpandable="False" Category="Path"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathPointNo" DisplayName="Path Point Index" IsExpandable="False" Category="Path"/>
+                        <xctk:PropertyDefinition TargetProperties="CamMoveBG" DisplayName="Cam Move BG" IsExpandable="False" Category="Camera"/>
                         <xctk:PropertyDefinition TargetProperties="LinkNumber" DisplayName="Link Number" IsExpandable="False"/>
-                        <xctk:PropertyDefinition TargetProperties="CamMovBG" DisplayName="Cam Move BG" IsExpandable="False"/>
                         <xctk:PropertyDefinition TargetProperties="ParentGroup" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="IsSelected" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="SelectedItems" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="Vertex1" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="Vertex2" IsBrowsable="False"/>
                         <xctk:PropertyDefinition TargetProperties="Vertex3" IsBrowsable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="HasSelection" IsBrowsable="False"/>
                     </xctk:PropertyGrid.PropertyDefinitions>
                 </xctk:PropertyGrid>
+                <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="7,0,0,8" Height="26" VerticalAlignment="Bottom"/>
+                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}"/>
+                <Label Content="cm/s" HorizontalAlignment="Left" Margin="239,0,0,8" Height="26" VerticalAlignment="Bottom"/>
             </Grid>
         </DockPanel>
-        <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1">
+        <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1" >
             <WindowsFormsHost x:Name="GLHost" Background="{x:Null}" DockPanel.Dock="Bottom" Initialized="GLHost_Initialized" Foreground="{x:Null}"/>
         </DockPanel>
-        <DockPanel LastChildFill="True" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75">
+        <DockPanel LastChildFill="True" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75" Background="#FFC7C7C7">
             <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="75" VerticalAlignment="Bottom">
                 <Label Content="Terrain Type:" Margin="3,7,0,40" Height="28" HorizontalAlignment="Left"/>
                 <Label Content="Room Number:" Margin="3,40,0,1" HorizontalAlignment="Left" Width="95" Height="34"/>

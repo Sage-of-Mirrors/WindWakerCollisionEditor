@@ -155,6 +155,11 @@ namespace CollisionEditor
                 Console.WriteLine(GL.GetShaderInfoLog(address));
         }
 
+        public Camera GetCamera()
+        {
+            return Cam;
+        }
+
         #endregion
 
         #region Rendering
@@ -383,6 +388,12 @@ namespace CollisionEditor
             {
                 FocusCamera(this, new EventArgs());
             }
+
+            if (Input.GetKey(Keys.OemMinus))
+                Cam.MoveSpeed -= 100;
+
+            if (Input.GetKey(Keys.Oemplus))
+                Cam.MoveSpeed += 100;
         }
 
         void host_LayoutUpdated(object sender, EventArgs e)
