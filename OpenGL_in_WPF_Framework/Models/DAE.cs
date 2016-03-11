@@ -8,7 +8,7 @@ using GameFormatReader.Common;
 using grendgine_collada;
 using OpenTK;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     class DAE
     {

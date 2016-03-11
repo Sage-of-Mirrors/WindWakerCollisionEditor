@@ -1,4 +1,4 @@
-﻿namespace CollisionEditor
+﻿namespace WindWakerCollisionEditor
 {
     partial class AboutBox
     {

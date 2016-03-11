@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     /// <summary>
     /// Interaction logic for AboutWindow.xaml

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     partial class AboutBox : Form
     {

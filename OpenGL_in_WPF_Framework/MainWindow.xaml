@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:loc="clr-namespace:CollisionEditor"
+        xmlns:loc="clr-namespace:WindWakerCollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        x:Class="CollisionEditor.MainWindow"
+        x:Class="WindWakerCollisionEditor.MainWindow"
         Title="MainWindow" Height="621" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.DataContext>
         <loc:ViewModel/>

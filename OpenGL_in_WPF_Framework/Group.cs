@@ -11,7 +11,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public enum TerrainType
     {

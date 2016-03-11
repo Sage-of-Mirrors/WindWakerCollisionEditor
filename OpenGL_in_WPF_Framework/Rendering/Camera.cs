@@ -10,7 +10,7 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public class Camera : INotifyPropertyChanged
     {
@@ -137,10 +137,6 @@ namespace CollisionEditor
 
             Vector3 camOffset = Vector3.Multiply(Vector3.Normalize(Trans.Forward), -distanceFromBoundingSphere);
 
-            Console.WriteLine("Distance from Sphere: " + distanceFromBoundingSphere);
-
-            Console.WriteLine("CamOffset: " + camOffset);
-
             //Trans.LookAt(boundingBox.Center);
 
             Trans.Position = (camOffset + boundingBox.Center);
@@ -248,7 +244,6 @@ namespace CollisionEditor
                     }
                 }
             }
-            Console.WriteLine("smallest time: " + smallestTime);
             return closestTri;
         }
 

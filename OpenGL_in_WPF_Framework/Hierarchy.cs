@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     class Hierarchy
     {

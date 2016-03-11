@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using GameFormatReader.Common;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public class DZBExporter
     {

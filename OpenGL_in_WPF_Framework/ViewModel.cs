@@ -25,7 +25,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     class ViewModel : INotifyPropertyChanged
     {

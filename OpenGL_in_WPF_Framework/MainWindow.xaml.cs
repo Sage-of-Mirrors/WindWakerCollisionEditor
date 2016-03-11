@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

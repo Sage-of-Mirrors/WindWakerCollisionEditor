@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using OpenTK;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public class Triangle : INotifyPropertyChanged
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GameFormatReader.Common;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public class Property : INotifyPropertyChanged
     {

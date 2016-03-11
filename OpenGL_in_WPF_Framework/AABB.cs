@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace CollisionEditor
+namespace WindWakerCollisionEditor
 {
     public class AABB
     {
@@ -54,8 +54,6 @@ namespace CollisionEditor
             float minY = float.MaxValue;
 
             float minZ = float.MaxValue;
-
-            Console.WriteLine("Triangle count: " + triList.Count);
 
             foreach (Triangle tri in triList)
             {
@@ -133,12 +131,6 @@ namespace CollisionEditor
             //Max -= Center;
 
             //Min -= Center;
-
-            Console.WriteLine("Min: (" + Min.X + ", " + Min.Y + ", " + Min.Z + ")");
-
-            Console.WriteLine("Max: (" + Max.X + ", " + Max.Y + ", " + Max.Z + ")");
-
-            Console.WriteLine("Center: (" + Center.X + ", " + Center.Y + ", " + Center.Z + ")");
         }
 
         public bool Contains(Vector3 point)
