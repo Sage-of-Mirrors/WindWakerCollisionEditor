@@ -87,7 +87,7 @@
                     </xctk:PropertyGrid.PropertyDefinitions>
                 </xctk:PropertyGrid>
                 <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="7,0,0,8" Height="26" VerticalAlignment="Bottom"/>
-                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}"/>
+                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
                 <Label Content="cm/s" HorizontalAlignment="Left" Margin="239,0,0,8" Height="26" VerticalAlignment="Bottom"/>
             </Grid>
         </DockPanel>

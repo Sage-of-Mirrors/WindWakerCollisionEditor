@@ -390,7 +390,11 @@ namespace WindWakerCollisionEditor
             }
 
             if (Input.GetKey(Keys.OemMinus))
-                Cam.MoveSpeed -= 100;
+            {
+                if (Cam.MoveSpeed > 100)
+                    Cam.MoveSpeed -= 100;
+            }
+
 
             if (Input.GetKey(Keys.Oemplus))
                 Cam.MoveSpeed += 100;

@@ -49,6 +49,8 @@ namespace WindWakerCollisionEditor
 
         private Camera m_cam;
 
+        private bool isDataLoaded;
+
         public Camera Cam
         {
             get { return m_cam; }
@@ -221,6 +223,8 @@ namespace WindWakerCollisionEditor
                     }
 
                     FocusCameraInit();
+
+                    isDataLoaded = true;
                 }
             }
         }
@@ -242,7 +246,7 @@ namespace WindWakerCollisionEditor
             m_renderer.Cam.SetCameraView(boundingBox, m_renderer.m_control.Width, m_renderer.m_control.Height);
         }
 
-        public void Save()
+        public bool Save()
         {
             SaveFileDialog saveFile = new SaveFileDialog();
 
@@ -258,12 +262,21 @@ namespace WindWakerCollisionEditor
                     }
 
                     MessageBox.Show("Export successful!", "Export complete");
+
+                    return true;
                 }
 
                 catch
                 {
                     MessageBox.Show("Something went wrong. Please open an Issue on Sage-of-Mirrors' Github!", "Uh-oh. :(");
+
+                    return false;
                 }
+            }
+
+            else
+            {
+                return false;
             }
         }
 
@@ -276,15 +289,20 @@ namespace WindWakerCollisionEditor
 
         public void Close()
         {
-            SelectedTriangles.SelectedItems.Clear();
+            if (AskSaveFile())
+            {
+                SelectedTriangles.SelectedItems.Clear();
 
-            SelectedTriangles.HasSelection = false;
+                SelectedTriangles.HasSelection = false;
 
-            test.Update();
+                test.Update();
 
-            Categories.Clear();
+                Categories.Clear();
 
-            m_renderer.RenderableObjs.Clear();
+                m_renderer.RenderableObjs.Clear();
+
+                isDataLoaded = false;
+            }
         }
 
         public void Delete()
@@ -704,6 +722,31 @@ namespace WindWakerCollisionEditor
             System.Diagnostics.Process.Start("https://github.com/Sage-of-Mirrors/DZBCollisionEditor/wiki");
         }
 
+        private bool AskSaveFile()
+        {
+            if (Categories != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Would you like to save the currently open mesh?", "Save current file?", MessageBoxButton.YesNoCancel);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    return Save();
+                }
+
+                else if (result == MessageBoxResult.No)
+                {
+                    return true;
+                }
+
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
         #region Command Callbacks
 
         /// <summary> The user has requested to open a new map, ask which map and then unload current if needed. </summary>
@@ -715,13 +758,13 @@ namespace WindWakerCollisionEditor
         /// <summary> The user has requested to save the currently open map. Only available if a map is currently opened. </summary>
         public ICommand OnRequestMapSave
         {
-            get { return new RelayCommand(x => Save(), x => m_categories != null); }
+            get { return new RelayCommand(x => Save(), x => isDataLoaded); }
         }
 
         /// <summary> The user has requested to unload the currently open map. Only available if a map is currently opened. Ask user if they'd like to save. </summary>
         public ICommand OnRequestMapClose
         {
-            get { return new RelayCommand(x => Close(), x => Categories != null); }
+            get { return new RelayCommand(x => Close(), x => isDataLoaded); }
         }
 
         /// <summary> The user has requested to undo the last action. Only available if they've made an undoable action. </summary>
@@ -739,13 +782,13 @@ namespace WindWakerCollisionEditor
         /// <summary> Delete the currently selected objects in the world. Only available if there is a one or more currently selected objects. </summary>
         public ICommand OnRequestRegroupTris
         {
-            get { return new RelayCommand(x => RegroupSelectedTriangles(), x => Categories != null); }
+            get { return new RelayCommand(x => RegroupSelectedTriangles(), x => SelectedTriangles.SelectedItems.Count != 0); }
         }
 
         /// <summary> Delete the currently selected objects in the world. Only available if there is a one or more currently selected objects. </summary>
         public ICommand OnRequestRecategorizeTris
         {
-            get { return new RelayCommand(x => RecategorizeSelectedTriangles(), x => Categories != null); }
+            get { return new RelayCommand(x => RecategorizeSelectedTriangles(), x => SelectedTriangles.SelectedItems.Count != 0); }
         }
 
         /// <summary> Delete the currently selected objects in the world. Only available if there is a one or more currently selected objects. </summary>
@@ -757,7 +800,7 @@ namespace WindWakerCollisionEditor
         /// <summary> The user has pressed Alt + F4, chosen Exit from the File menu, or clicked the close button. </summary>
         public ICommand OnRequestApplicationClose
         {
-            get { return new RelayCommand(x => Application.Current.MainWindow.Close()); }
+            get { return new RelayCommand(x => ExitApplication()); }
         }
 
         /// <summary> The user has pressed Alt + F4, chosen Exit from the File menu, or clicked the close button. </summary>
@@ -788,6 +831,13 @@ namespace WindWakerCollisionEditor
         }
 
         #endregion
+
+        private void ExitApplication()
+        {
+            AskSaveFile();
+
+            Application.Current.MainWindow.Close();
+        }
     }
 
     public class NullToFalseConverter : IValueConverter
