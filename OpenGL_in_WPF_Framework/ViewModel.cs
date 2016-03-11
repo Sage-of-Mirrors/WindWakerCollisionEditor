@@ -689,9 +689,9 @@ namespace CollisionEditor
 
         private void DisplayAboutWindow()
         {
-            AboutBox about = new AboutBox();
+            AboutWindow win = new AboutWindow();
 
-            about.Show();
+            win.Show();
         }
 
         private void ReportBug()
