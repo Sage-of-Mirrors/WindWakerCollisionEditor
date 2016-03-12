@@ -60,6 +60,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Downloads\opentk-1.1-4c\opentk-1.1-4c\Binaries\OpenTK\Debug\OpenTK.GLControl.dll</HintPath>
     </Reference>
+    <Reference Include="RecentFileListLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\RecentFileListLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -535,6 +539,7 @@
     <Content Include="OpenTK.GLControl.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="RecentFileListLib.dll" />
     <Resource Include="Resources\ApplicationIcon.ico" />
     <Resource Include="Resources\AboutWindowLogo.png" />
   </ItemGroup>

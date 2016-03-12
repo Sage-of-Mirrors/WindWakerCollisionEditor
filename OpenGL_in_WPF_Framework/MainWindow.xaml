@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:common="clr-namespace:Common;assembly=RecentFileListLib"
         xmlns:loc="clr-namespace:WindWakerCollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="WindWakerCollisionEditor.MainWindow"
@@ -33,7 +34,7 @@
                     <MenuItem Header="_Save" Command="{Binding OnRequestMapSave}"/>
                     <MenuItem Header="Save _As" Command="{Binding OnRequestMapSaveAs}"/>
                     <MenuItem Header="_Close" Command="{Binding OnRequestMapClose}"/>
-                    <Separator/>
+                    <common:RecentFileList x:Name="RecentFileList"/>
                     <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>
                 </MenuItem>
                 <MenuItem Header="Edit">

@@ -24,6 +24,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Xceed.Wpf.Toolkit.PropertyGrid;
+using Common;
 
 namespace WindWakerCollisionEditor
 {
@@ -40,6 +41,8 @@ namespace WindWakerCollisionEditor
         }
 
         #endregion
+
+        private RecentFileList m_recentFileList;
 
         private string m_currentFile;
 
@@ -161,7 +164,7 @@ namespace WindWakerCollisionEditor
         //Primary data structure
         private ObservableCollection<Category> m_categories;
 
-        internal void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, PropertyGrid grid)
+        internal void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, PropertyGrid grid, RecentFileList fileList)
         {
             m_renderer = new Renderer(ctrl, host);
 
@@ -178,6 +181,10 @@ namespace WindWakerCollisionEditor
             m_renderer.FocusCamera += m_renderer_FocusCamera;
 
             Cam = m_renderer.GetCamera();
+
+            m_recentFileList = fileList;
+
+            m_recentFileList.MenuClick += (s, e) => Open(e.Filepath);
 
             CurrentFile = "";
         }
@@ -241,7 +248,7 @@ namespace WindWakerCollisionEditor
             m_renderer.Cam.SetCameraView(boundingBox, m_renderer.m_control.Width, m_renderer.m_control.Height);
         }
 
-        public void Open()
+        public void OpenFileFromDialog()
         {
             OpenFileDialog openFile = new OpenFileDialog();
 
@@ -249,9 +256,15 @@ namespace WindWakerCollisionEditor
 
             if (openFile.ShowDialog() == true)
             {
-                CurrentFile = openFile.FileName;
+                Open(openFile.FileName);
+            }
+        }
 
-                string[] fileNameExtension = CurrentFile.Split('.');
+        public void Open(string fileName)
+        {
+            try
+            {
+                string[] fileNameExtension = fileName.Split('.');
 
                 if (fileNameExtension.Count() >= 2)
                 {
@@ -261,10 +274,10 @@ namespace WindWakerCollisionEditor
                         case "rarc":
                             break;
                         case "dae":
-                            GetDaeData(openFile.FileName);
+                            GetDaeData(fileName);
                             break;
                         case "dzb":
-                            using (FileStream stream = new FileStream(openFile.FileName, FileMode.Open))
+                            using (FileStream stream = new FileStream(fileName, FileMode.Open))
                             {
                                 EndianBinaryReader reader = new EndianBinaryReader(stream, Endian.Big);
 
@@ -275,7 +288,20 @@ namespace WindWakerCollisionEditor
 
                     FocusCameraInit();
 
+                    CurrentFile = fileName;
+
+                    m_recentFileList.InsertFile(CurrentFile);
+
                     isDataLoaded = true;
+                }
+            }
+            catch
+            {
+                if (m_recentFileList.RecentFiles.Contains(fileName))
+                {
+                    MessageBox.Show("The file '" + fileName + "' no longer exists. It will be removed from the recently used files.", "File Not Found");
+
+                    m_recentFileList.RemoveFile(fileName);
                 }
             }
         }
@@ -319,7 +345,9 @@ namespace WindWakerCollisionEditor
 
             if (saveFile.ShowDialog() == true)
             {
-                Export(saveFile.SafeFileName.Split('.')[0]);
+                Export(saveFile.FileName.Split('.')[0] + ".dzb");
+
+                m_recentFileList.InsertFile(saveFile.FileName.Split('.')[0] + ".dzb");
 
                 return true;
             }
@@ -814,7 +842,7 @@ namespace WindWakerCollisionEditor
         /// <summary> The user has requested to open a new map, ask which map and then unload current if needed. </summary>
         public ICommand OnRequestMapOpen
         {
-            get { return new RelayCommand(x => Open()); }
+            get { return new RelayCommand(x => OpenFileFromDialog()); }
         }
 
         /// <summary> The user has requested to save the currently open map. Only available if a map is currently opened. </summary>
