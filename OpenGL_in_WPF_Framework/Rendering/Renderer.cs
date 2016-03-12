@@ -306,6 +306,8 @@ namespace WindWakerCollisionEditor
         {
             Input.Internal_SetMouseBtnState(e.Button, true);
 
+            args.SelectedTris.Clear();
+
             if (Input.GetMouseButton(0))
             {
                 DoRayCast(e.X, e.Y);
@@ -359,7 +361,7 @@ namespace WindWakerCollisionEditor
 
         void m_control_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-
+            m_control.Focus();
         }
 
         void host_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)

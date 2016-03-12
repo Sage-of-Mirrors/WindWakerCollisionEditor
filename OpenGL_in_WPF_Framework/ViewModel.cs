@@ -41,6 +41,42 @@ namespace WindWakerCollisionEditor
 
         #endregion
 
+        private string m_currentFile;
+
+        public string CurrentFile
+        {
+            get { return m_currentFile; }
+
+            set
+            {
+                if (value != m_currentFile)
+                {
+                    m_currentFile = value;
+
+                    WindowTitle = m_currentFile;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private string m_windowTitle;
+
+        public string WindowTitle
+        {
+            get { return m_windowTitle; }
+
+            set
+            {
+                if (value != m_windowTitle)
+                {
+                    m_windowTitle = value + " - Wind Waker Collision Editor";
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         private Renderer m_renderer;
 
         private TreeView m_tree;
@@ -142,6 +178,8 @@ namespace WindWakerCollisionEditor
             m_renderer.FocusCamera += m_renderer_FocusCamera;
 
             Cam = m_renderer.GetCamera();
+
+            CurrentFile = "";
         }
 
         void m_renderer_FocusCamera(object sender, EventArgs e)
@@ -164,27 +202,38 @@ namespace WindWakerCollisionEditor
 
         void m_renderer_SelectedTris(object sender, SelectTriangleEventArgs e)
         {
+            if (!Input.GetKey(System.Windows.Forms.Keys.LControlKey))
+            {
+                foreach (Triangle tri in SelectedTriangles.SelectedItems)
+                {
+                    tri.IsSelected = false;
+                }
+
+                SelectedTriangles.SelectedItems.Clear();
+            }
+
             if (e.SelectedTris.Count != 0)
             {
-                if (SelectedTriangles.SelectedItems.Count != 0)
-                {
-                    foreach (Triangle tri in SelectedTriangles.SelectedItems)
-                    {
-                        tri.IsSelected = false;
-                    }
-
-                    SelectedTriangles.SelectedItems.Clear();
-                }
-
                 foreach (Triangle tri in e.SelectedTris)
                 {
-                    tri.IsSelected = true;
+                    if (SelectedTriangles.SelectedItems.Contains(tri))
+                    {
+                        tri.IsSelected = false;
 
-                    SelectedTriangles.SelectedItems.Add(tri);
+                        SelectedTriangles.SelectedItems.Remove(tri);
+                    }
+
+                    else
+                    {
+                        tri.IsSelected = true;
+
+                        SelectedTriangles.SelectedItems.Add(tri);
+                    }
                 }
-
-                test.Update();
             }
+
+
+            test.Update();
         }
 
         internal void FocusCamera(AABB boundingBox)
@@ -200,7 +249,9 @@ namespace WindWakerCollisionEditor
 
             if (openFile.ShowDialog() == true)
             {
-                string[] fileNameExtension = openFile.FileName.Split('.');
+                CurrentFile = openFile.FileName;
+
+                string[] fileNameExtension = CurrentFile.Split('.');
 
                 if (fileNameExtension.Count() >= 2)
                 {
@@ -248,30 +299,29 @@ namespace WindWakerCollisionEditor
 
         public bool Save()
         {
+            if (!CurrentFile.EndsWith("dzb"))
+            {
+                SaveAs();
+
+                return true;
+            }
+
+            Export(CurrentFile);
+
+            return true;
+        }
+
+        public bool SaveAs()
+        {
             SaveFileDialog saveFile = new SaveFileDialog();
 
             saveFile.Filter = "DZB files (*.dzb)|*.dzb";
 
             if (saveFile.ShowDialog() == true)
             {
-                try
-                {
-                    using (EndianBinaryWriter writer = new EndianBinaryWriter(new FileStream(saveFile.FileName, FileMode.Create), Endian.Big))
-                    {
-                        Export(writer, saveFile.SafeFileName.Split('.')[0]);
-                    }
+                Export(saveFile.SafeFileName.Split('.')[0]);
 
-                    MessageBox.Show("Export successful!", "Export complete");
-
-                    return true;
-                }
-
-                catch
-                {
-                    MessageBox.Show("Something went wrong. Please open an Issue on Sage-of-Mirrors' Github!", "Uh-oh. :(");
-
-                    return false;
-                }
+                return true;
             }
 
             else
@@ -280,11 +330,21 @@ namespace WindWakerCollisionEditor
             }
         }
 
-        private void Export(EndianBinaryWriter writer, string fileName)
+        private void Export(string fileName)
         {
             DZBExporter expo = new DZBExporter(new List<Category>(Categories), fileName);
 
-            expo.Export(writer);
+            using (EndianBinaryWriter writer = new EndianBinaryWriter(new FileStream(fileName, FileMode.Create), Endian.Big))
+            {
+                try
+                {
+                    expo.Export(writer);
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         public void Close()
@@ -302,6 +362,8 @@ namespace WindWakerCollisionEditor
                 m_renderer.RenderableObjs.Clear();
 
                 isDataLoaded = false;
+
+                CurrentFile = "";
             }
         }
 
@@ -761,6 +823,12 @@ namespace WindWakerCollisionEditor
             get { return new RelayCommand(x => Save(), x => isDataLoaded); }
         }
 
+        /// <summary> The user has requested to save the currently open map. Only available if a map is currently opened. </summary>
+        public ICommand OnRequestMapSaveAs
+        {
+            get { return new RelayCommand(x => SaveAs(), x => isDataLoaded); }
+        }
+
         /// <summary> The user has requested to unload the currently open map. Only available if a map is currently opened. Ask user if they'd like to save. </summary>
         public ICommand OnRequestMapClose
         {
@@ -866,6 +934,27 @@ namespace WindWakerCollisionEditor
             }
 
             return false;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+          object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class FileNameStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value.GetType() == typeof(string))
+            {
+                string rawName = value as string;
+
+                return rawName + " - Wind Waker Collision Editor";
+            }
+
+            return "???";
         }
 
         public object ConvertBack(object value, Type targetType,

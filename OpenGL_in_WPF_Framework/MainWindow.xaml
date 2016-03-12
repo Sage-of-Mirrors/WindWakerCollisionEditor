@@ -6,7 +6,7 @@
         xmlns:loc="clr-namespace:WindWakerCollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="WindWakerCollisionEditor.MainWindow"
-        Title="MainWindow" Height="621" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
+        Title="{Binding WindowTitle}" Height="621" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.DataContext>
         <loc:ViewModel/>
     </Window.DataContext>
@@ -18,6 +18,7 @@
         </ObjectDataProvider>
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
         <loc:ZeroToFalseConverter x:Key="ZeroToFalseConverter"/>
+        <loc:FileNameStringConverter x:Key="FileNameStringConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -30,6 +31,7 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="_Open" Command="{Binding OnRequestMapOpen}"/>
                     <MenuItem Header="_Save" Command="{Binding OnRequestMapSave}"/>
+                    <MenuItem Header="Save _As" Command="{Binding OnRequestMapSaveAs}"/>
                     <MenuItem Header="_Close" Command="{Binding OnRequestMapClose}"/>
                     <Separator/>
                     <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>
@@ -63,18 +65,18 @@
             <Grid DockPanel.Dock="Right" Margin="0,1,0,0" Background="#FFC7C7C7">
                 <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,46" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
                     <xctk:PropertyGrid.PropertyDefinitions>
-                        <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the SCLS entry to use to exit the map. Set this to 63 for no exit."/>
+                        <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the exit (SCLS) entry to use to exit the map. Set this to 63 for no exit."/>
                         <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound Effects" IsExpandable="False" Category="Collision" Description="The sound to play when Link or another object interacts with the surface."/>
-                        <xctk:PropertyDefinition TargetProperties="PolyColor" DisplayName="Poly Color" IsExpandable="False"/>
+                        <xctk:PropertyDefinition TargetProperties="PolyColor" DisplayName="Enviroment Color Index" IsExpandable="False" Description="The index of the environmental color settings (ENVR) to use when Link interacts with the surface."/>
                         <xctk:PropertyDefinition TargetProperties="CameraID" DisplayName="Camera ID" IsExpandable="False" Category="Camera"/>
-                        <xctk:PropertyDefinition TargetProperties="GroundCode" DisplayName="Ground Type" IsExpandable="False" Category="Collision"/>
-                        <xctk:PropertyDefinition TargetProperties="WallCode" DisplayName="Wall Type" IsExpandable="False" Category="Collision"/>
-                        <xctk:PropertyDefinition TargetProperties="SpecialCode" DisplayName="Special Type" IsExpandable="False" Category="Collision"/>
-                        <xctk:PropertyDefinition TargetProperties="AttributeCode" DisplayName="Attribute Type" IsExpandable="False" Category="Collision"/>
+                        <xctk:PropertyDefinition TargetProperties="GroundCode" DisplayName="Ground Type" IsExpandable="False" Category="Collision" Description="Determines how Link can interact with the surface as the ground."/>
+                        <xctk:PropertyDefinition TargetProperties="WallCode" DisplayName="Wall Type" IsExpandable="False" Category="Collision" Description="Determines how Link can interact with the surface as a wall."/>
+                        <xctk:PropertyDefinition TargetProperties="SpecialCode" DisplayName="Special Type" IsExpandable="False" Category="Collision" Description="Determines special properties that the surface can have."/>
+                        <xctk:PropertyDefinition TargetProperties="AttributeCode" DisplayName="Attribute Type" IsExpandable="False" Category="Collision" Description="Determines the particles that spawn when the surface is interacted with."/>
                         <xctk:PropertyDefinition TargetProperties="CameraBehavior" DisplayName="Camera Behavior" IsExpandable="False" Category="Camera"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomCamID" DisplayName="Room Camera ID" IsExpandable="False" Category="Camera"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomPathID" DisplayName="Path Index" IsExpandable="False" Category="Path"/>
-                        <xctk:PropertyDefinition TargetProperties="RoomPathPointNo" DisplayName="Path Point Index" IsExpandable="False" Category="Path"/>
+                        <xctk:PropertyDefinition TargetProperties="RoomCamID" DisplayName="Camera Index" IsExpandable="False" Category="Camera" Description="The index of the camera (RCAM) entry to set the camera's behavior to. Set this to 255 for normal camera function."/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathID" DisplayName="Path Index" IsExpandable="False" Category="Path" Description="The index of the path (RPAT) entry to force Link to slide along."/>
+                        <xctk:PropertyDefinition TargetProperties="RoomPathPointNo" DisplayName="Waypoint Index" IsExpandable="False" Category="Path" Description="The index of the waypoint (RPPN) entry to force Link to slide to.\nThis is relative to the waypoints defined in the path specified by Path Index. "/>
                         <xctk:PropertyDefinition TargetProperties="CamMoveBG" DisplayName="Cam Move BG" IsExpandable="False" Category="Camera"/>
                         <xctk:PropertyDefinition TargetProperties="LinkNumber" DisplayName="Link Number" IsExpandable="False"/>
                         <xctk:PropertyDefinition TargetProperties="ParentGroup" IsBrowsable="False"/>
