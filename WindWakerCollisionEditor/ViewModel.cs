@@ -29,7 +29,6 @@ using Common;
 namespace WindWakerCollisionEditor
 {
     #region Data Converters
-
     /// <summary>
     /// Null-to-Bool converter. If an object is null, Convert returns false.
     /// </summary>
@@ -71,6 +70,25 @@ namespace WindWakerCollisionEditor
         }
     }
 
+    /// <summary>
+    /// Null-to-Visibilty converter. If the input value is null, Convert returns Visibility.Hidden.
+    /// </summary>
+    public class NullToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return Visibility.Hidden;
+
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+          object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     #endregion
 
     class ViewModel : INotifyPropertyChanged
@@ -567,7 +585,7 @@ namespace WindWakerCollisionEditor
             {
                 Group grp = e.NewValue as Group;
 
-                //SelectedGroup = grp;
+                SelectedGroup = grp;
 
                 SelectTriangleEventArgs args = new SelectTriangleEventArgs();
 
@@ -579,6 +597,18 @@ namespace WindWakerCollisionEditor
             if ((e.NewValue != null) && (e.NewValue.GetType() == typeof(Category)))
             {
                 SelectedCategory = (Category)e.NewValue;
+
+                SelectTriangleEventArgs args = new SelectTriangleEventArgs();
+
+                args.SelectedTris = new List<Triangle>();
+
+                foreach (Group grp in SelectedCategory.Groups)
+                {
+                    foreach (Triangle tri in grp.Triangles)
+                        args.SelectedTris.Add(tri);
+                }
+
+                m_renderer_SelectedTris(this, args);
             }
 
             else

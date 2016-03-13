@@ -100,6 +100,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bounding Box\AABB.cs" />
+    <Compile Include="Data\SelectTriangleEventArgs.cs" />
     <Compile Include="Forms\AboutWindow.cs" />
     <Compile Include="Octree\Octet.cs" />
     <Compile Include="Property Enums\AttributeCode.cs" />
@@ -464,6 +465,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
+    <Compile Include="TriSelectionType.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="Forms\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

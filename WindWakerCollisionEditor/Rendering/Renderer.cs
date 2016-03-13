@@ -38,6 +38,31 @@ namespace WindWakerCollisionEditor
 
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Represents the GLControl associated with this Renderer.
+        /// </summary>
+        public GLControl m_control;
+
+        /// <summary>
+        /// Regulates rendering calls to roughly 60 fps.
+        /// </summary>
+        private System.Windows.Forms.Timer m_intervalTimer;
+
+        /// <summary>
+        /// Args for the Triangle selection events
+        /// </summary>
+        SelectTriangleEventArgs args = new SelectTriangleEventArgs();
+
+        /// <summary>
+        /// Specifies the current selection type.
+        /// </summary>
+        public TriSelectionType SelectionType;
+
+        #region Camera
+        /// <summary>
+        /// Represents the viewport's Camera.
+        /// </summary>
         public Camera Cam
         {
             get { return m_Camera; }
@@ -53,35 +78,49 @@ namespace WindWakerCollisionEditor
         }
 
         private Camera m_Camera;
+        #endregion
 
-        public List<IRenderable> RenderableObjs { get { return m_renderableObjs; } set { m_renderableObjs = value; } }
-        private List<IRenderable> m_renderableObjs;
-        
-        private System.Windows.Forms.Timer m_intervalTimer;
-
-        public GLControl m_control;
-
-        private int _programID;
-        private int _uniformMVP;
-        private int _uniformColor;
-
-        private Matrix4 ViewMatrix;
-        private Matrix4 ProjectionMatrix;
-
+        #region Debug
+        /// <summary>
+        /// Determines the color of an object when hit by a ray.
+        /// Used for debugging the raycasting code.
+        /// </summary>
         private Color4 debugRayColor = Color4.Yellow;
+        #endregion
 
+        #region Events
         public event EventHandler<SelectTriangleEventArgs> SelectedTris;
-
-        SelectTriangleEventArgs args = new SelectTriangleEventArgs();
 
         public event EventHandler RegroupTris;
 
         public event EventHandler RecategorizeTris;
 
         public event EventHandler FocusCamera;
+        #endregion
+
+        #region Integers
+        private int _programID;
+        private int _uniformMVP;
+        private int _uniformColor;
+        #endregion
+
+        #region Matrices
+        private Matrix4 ViewMatrix;
+        private Matrix4 ProjectionMatrix;
+        #endregion
+
+        #region Renderable Object List
+        public List<IRenderable> RenderableObjs { get { return m_renderableObjs; } set { m_renderableObjs = value; } }
+        private List<IRenderable> m_renderableObjs;
+        #endregion
+        #endregion
 
         #region Construction
-
+        /// <summary>
+        /// Sets up the Renderer and rendering methods.
+        /// </summary>
+        /// <param name="context">GLControl to associate with this Renderer</param>
+        /// <param name="host">WindowsFormHost of the GLControl</param>
         public Renderer(GLControl context, WindowsFormsHost host)
         {
             m_control = context;
@@ -90,6 +129,7 @@ namespace WindWakerCollisionEditor
 
             SetUpViewport();
 
+            // Set up the timer for rendering
             m_intervalTimer = new System.Windows.Forms.Timer();
             m_intervalTimer.Interval = 16; // 60 FPS roughly
             m_intervalTimer.Enabled = true;
@@ -115,31 +155,18 @@ namespace WindWakerCollisionEditor
 
             m_control.MouseMove += m_control_MouseMove;
 
-            m_control.MouseWheel += m_control_MouseWheel;
+            m_control.MouseWheel += (args, o) => { Input.SetMouseScrollDelta(o.Delta); };
 
             host.KeyUp += host_KeyUp;
 
             host.KeyDown += host_KeyDown;
 
             host.LayoutUpdated += host_LayoutUpdated;
-
-            host.MouseWheel += host_MouseWheel;
         }
 
-        void m_control_MouseWheel(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            Input.SetMouseScrollDelta(e.Delta);
-        }
-
-        void host_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-        }
-
-        void m_control_Scroll(object sender, ScrollEventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Sets up the viewport by creating a Camera and loading shaders.
+        /// </summary>
         private void SetUpViewport()
         {
             _programID = GL.CreateProgram();
@@ -164,6 +191,13 @@ namespace WindWakerCollisionEditor
                 Console.WriteLine(GL.GetProgramInfoLog(_programID));
         }
 
+        /// <summary>
+        /// Loads a shader from file.
+        /// </summary>
+        /// <param name="fileName">Filename of the shader</param>
+        /// <param name="type">ShaderType of the shader</param>
+        /// <param name="program">OpenGL Program that the shader will be attatched to</param>
+        /// <param name="address">Address of the shader once it has been loaded</param>
         private void LoadShader(string fileName, ShaderType type, int program, out int address)
         {
             address = GL.CreateShader(type);
@@ -182,16 +216,12 @@ namespace WindWakerCollisionEditor
             if (compileSuccess == 0)
                 Console.WriteLine(GL.GetShaderInfoLog(address));
         }
-
-        public Camera GetCamera()
-        {
-            return Cam;
-        }
-
         #endregion
 
         #region Rendering
-
+        /// <summary>
+        /// Draws the scene to the viewport
+        /// </summary>
         private void Draw()
         {
             GL.ClearColor(new Color4(.36f, .25f, .94f, 1f));
@@ -225,11 +255,13 @@ namespace WindWakerCollisionEditor
             foreach (IRenderable rend in m_renderableObjs)
                 rend.Render(_uniformMVP, _uniformColor, ViewMatrix, ProjectionMatrix);
 
-            //RenderDebugTri();
-
             m_control.SwapBuffers();
         }
 
+        /// <summary>
+        /// Renders a triangle to the viewport.
+        /// Used for debugging the viewport.
+        /// </summary>
         private void RenderDebugTri()
         {
             Matrix4 modelMatrix = Matrix4.CreateTranslation(new Vector3(0, 0, 0)) * Matrix4.Rotate(Quaternion.Identity) * Matrix4.Scale(1);
@@ -248,6 +280,10 @@ namespace WindWakerCollisionEditor
             GL.End();
         }
 
+        /// <summary>
+        /// Renders a cube to the viewport.
+        /// Used for debugging the viewport.
+        /// </summary>
         private void RenderDebugCube()
         {
             Matrix4 modelMatrix = Matrix4.CreateTranslation(new Vector3(0, 0, 0)) * Matrix4.Rotate(Quaternion.Identity) * Matrix4.Scale(1);
@@ -320,16 +356,24 @@ namespace WindWakerCollisionEditor
 
             GL.End();
         }
-
         #endregion
 
         #region Events
-
+        /// <summary>
+        /// Handler for m_control's MouseUp event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void m_control_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             Input.Internal_SetMouseBtnState(e.Button, false);
         }
 
+        /// <summary>
+        /// Handle for m_control's MouseDown event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void m_control_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             Input.Internal_SetMouseBtnState(e.Button, true);
@@ -342,27 +386,41 @@ namespace WindWakerCollisionEditor
             }
         }
 
+        /// <summary>
+        /// Casts a ray using the specified X and Y coordinates from the mouse.
+        /// </summary>
+        /// <param name="mousePosX">The mouse's X position</param>
+        /// <param name="mousePosY">The mouse's Y position</param>
         private void DoRayCast(int mousePosX, int mousePosY)
         {
             List<Group> groupList = new List<Group>();
 
+            // Get a list of all the groups currently loaded
             foreach (IRenderable rend in m_renderableObjs)
             {
                 if (rend.GetType() == typeof(Group))
                     groupList.Add(rend as Group);
             }
 
-                Triangle tri = Cam.CastAgainstTriangle(mousePosX, mousePosY,
-                    m_control.Width, m_control.Height, ProjectionMatrix, groupList);
+            // See if we hit a triangle
+            Triangle tri = Cam.CastAgainstTriangle(mousePosX, mousePosY,
+                m_control.Width, m_control.Height, ProjectionMatrix, groupList);
 
-                if (tri != null)
+            // We hit a triangle
+            if (tri != null)
+            {
+                // We're just going to select the individual triangles
+                if (SelectionType == TriSelectionType.Triangle)
                 {
+                    // We're holding the left Control key, meaning we want to add the triangle to the current selection
                     if (Input.GetKey(Keys.LControlKey))
                     {
+                        // Just checking to see if the triangle is already selected, so we don't add it to the selection twice
                         if (!args.SelectedTris.Contains(tri))
                             args.SelectedTris.Add(tri);
                     }
 
+                    // Clear the current selection, then add the triangle to it
                     else
                     {
                         foreach (Triangle tria in args.SelectedTris)
@@ -374,9 +432,76 @@ namespace WindWakerCollisionEditor
                     }
                 }
 
+                // We want to select the group that this triangle belongs to.
+                else if (SelectionType == TriSelectionType.Group)
+                {
+                    // We're holding the left Control key, meaning we want to add to the current selection
+                    if (Input.GetKey(Keys.LControlKey))
+                    {
+                        foreach (Triangle tria in tri.ParentGroup.Triangles)
+                        {
+                            if (!args.SelectedTris.Contains(tria))
+                                args.SelectedTris.Add(tria);
+                        }
+                    }
+
+                    // Clear the current selection, then add the group's triangles to it
+                    else
+                    {
+                        foreach (Triangle tria in args.SelectedTris)
+                            tria.IsSelected = false;
+
+                        args.SelectedTris.Clear();
+
+                        foreach (Triangle tria in tri.ParentGroup.Triangles)
+                        {
+                            args.SelectedTris.Add(tria);
+                        }
+                    }
+                }
+
+                // We'll select all of the groups that are in the same category as the triangle's group.
+                else if (SelectionType == TriSelectionType.Category)
+                {
+                    // We're holding the left Control key, meaning we want to add to the current selection
+                    if (Input.GetKey(Keys.LControlKey))
+                    {
+                        foreach (Group gro in tri.ParentGroup.GroupCategory.Groups)
+                        {
+                            foreach (Triangle tria in gro.Triangles)
+                            {
+                                if (!args.SelectedTris.Contains(tria))
+                                    args.SelectedTris.Add(tria);
+                            }
+                        }
+                    }
+
+                    // Clear the current selection, then add the group's triangles to it
+                    else
+                    {
+                        foreach (Triangle tria in args.SelectedTris)
+                            tria.IsSelected = false;
+
+                        args.SelectedTris.Clear();
+
+                        foreach (Group gro in tri.ParentGroup.GroupCategory.Groups)
+                        {
+                            foreach (Triangle tria in gro.Triangles)
+                            {
+                                args.SelectedTris.Add(tria);
+                            }
+                        }
+                    }
+                }
+            }
+
             OnSelectObject(args);
         }
 
+        /// <summary>
+        /// Handles Triangle selection.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnSelectObject(SelectTriangleEventArgs e)
         {
             EventHandler<SelectTriangleEventArgs> handler = SelectedTris;
@@ -387,16 +512,31 @@ namespace WindWakerCollisionEditor
             }
         }
 
+        /// <summary>
+        /// Handler for m_control's MouseMove event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void m_control_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             m_control.Focus();
         }
 
+        /// <summary>
+        /// Handler for host's KeyUp event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void host_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             Input.Internal_SetKeyState((Keys)KeyInterop.VirtualKeyFromKey(e.Key), false);
         }
 
+        /// <summary>
+        /// Handler for host's KeyDown event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void host_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             Input.Internal_SetKeyState((Keys)KeyInterop.VirtualKeyFromKey(e.Key), true);
@@ -428,23 +568,33 @@ namespace WindWakerCollisionEditor
 
             if (Input.GetKey(Keys.Oemplus))
                 Cam.MoveSpeed += 100;
+
+            if (Input.GetKeyDown(Keys.R))
+                SelectionType = ToggleSelectionType();
         }
 
+        /// <summary>
+        /// Handler for host's LayoutUpdated event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void host_LayoutUpdated(object sender, EventArgs e)
         {
             GL.Viewport(0, 0, m_control.Width, m_control.Height);
         }
 
-        #endregion
-    }
-
-    class SelectTriangleEventArgs : EventArgs
-    {
-        public SelectTriangleEventArgs()
+        private TriSelectionType ToggleSelectionType()
         {
-            SelectedTris = new List<Triangle>();
-        }
+            int intType = (int)SelectionType;
 
-        public List<Triangle> SelectedTris { get; set; }
+            if (SelectionType != TriSelectionType.Category)
+                intType += 1;
+
+            else
+                intType = 0;
+
+            return (TriSelectionType)intType;
+        }
+        #endregion
     }
 }

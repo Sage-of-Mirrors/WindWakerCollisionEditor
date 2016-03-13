@@ -107,7 +107,7 @@ namespace WindWakerCollisionEditor
 
             float moveSpeed = Input.GetKey(Keys.Space) ? MoveSpeed * 10f : MoveSpeed;
 
-            int scrollSensitivity = 10;
+            int scrollSensitivity = 300;
 
             // Normalize the move direction
             moveDir.NormalizeFast();

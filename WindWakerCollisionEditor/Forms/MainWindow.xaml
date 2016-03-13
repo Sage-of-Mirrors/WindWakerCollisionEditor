@@ -7,7 +7,7 @@
         xmlns:loc="clr-namespace:WindWakerCollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="WindWakerCollisionEditor.MainWindow"
-        Title="{Binding WindowTitle}" Height="621" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
+        Title="{Binding WindowTitle}" Height="637.5" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.DataContext>
         <loc:ViewModel/>
     </Window.DataContext>
@@ -19,6 +19,7 @@
         </ObjectDataProvider>
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
         <loc:ZeroToFalseConverter x:Key="ZeroToFalseConverter"/>
+        <loc:NullToVisConverter x:Key="NullToVis" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -50,7 +51,7 @@
             </Menu>
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,20,0,75" Width="210" HorizontalAlignment="Left" Background="#FFC7C7C7">
-            <TreeView x:Name="treeView" Width="210" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Categories}">
+            <TreeView x:Name="treeView" Width="210" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ItemsSource="{Binding Categories}" Margin="0,0,0,33">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type loc:Category}" ItemsSource="{Binding Groups}">
                         <Grid Margin="5,0">
@@ -96,13 +97,16 @@
         <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1" >
             <WindowsFormsHost x:Name="GLHost" Background="{x:Null}" DockPanel.Dock="Bottom" Initialized="GLHost_Initialized" Foreground="{x:Null}"/>
         </DockPanel>
-        <DockPanel LastChildFill="True" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="210" Height="75" Background="#FFC7C7C7">
-            <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="75" VerticalAlignment="Bottom">
-                <Label Content="Terrain Type:" Margin="3,7,0,40" Height="28" HorizontalAlignment="Left"/>
-                <Label Content="Room Number:" Margin="3,40,0,1" HorizontalAlignment="Left" Width="95" Height="34"/>
-                <ComboBox Margin="98,10,0,42" SelectedValue="{Binding SelectedCategory.Terrain}" 
+        <DockPanel LastChildFill="True" HorizontalAlignment="Left" Width="210" Background="#FFC7C7C7" Margin="1,0,0,0" Grid.ColumnSpan="2" Height="105" VerticalAlignment="Bottom">
+            <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Margin="0,-5,0,0">
+                <Label Content="Terrain Type:" Margin="3,7,0,85" HorizontalAlignment="Left"/>
+                <Label Content="Room Number:" Margin="3,40,0,46" HorizontalAlignment="Left" Width="95"/>
+                <ComboBox Margin="98,10,0,87" SelectedValue="{Binding SelectedCategory.Terrain}" 
 					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
-                <TextBox Margin="98,41,0,10" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
+                <TextBox Margin="98,41,0,55" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
+                <Label Content="Name:" HorizontalAlignment="Left" Margin="4,73,0,21"/>
+                <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding SelectedCategory.Name}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVis}}"  Width="106"/>
+                <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding SelectedGroup.Name}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedGroup, Converter={StaticResource NullToVis}}"  Width="106"/>
             </Grid>
         </DockPanel>
     </Grid>
