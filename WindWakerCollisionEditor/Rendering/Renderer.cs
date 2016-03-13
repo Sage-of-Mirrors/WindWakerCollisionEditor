@@ -147,8 +147,8 @@ namespace WindWakerCollisionEditor
             Cam = new Camera();
 
             int vertShaderId, fragShaderId;
-            LoadShader("vs.glsl", ShaderType.VertexShader, _programID, out vertShaderId);
-            LoadShader("fs.glsl", ShaderType.FragmentShader, _programID, out fragShaderId);
+            LoadShader(@"Rendering/vs.glsl", ShaderType.VertexShader, _programID, out vertShaderId);
+            LoadShader(@"Rendering/fs.glsl", ShaderType.FragmentShader, _programID, out fragShaderId);
 
             GL.DeleteShader(vertShaderId);
             GL.DeleteShader(fragShaderId);

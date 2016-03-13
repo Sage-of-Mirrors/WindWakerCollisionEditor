@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -99,22 +99,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AABB.cs" />
-    <Compile Include="AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutBox.Designer.cs">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AboutWindow.cs" />
-    <Compile Include="Octet.cs" />
+    <Compile Include="Bounding Box\AABB.cs" />
+    <Compile Include="Forms\AboutWindow.cs" />
+    <Compile Include="Octree\Octet.cs" />
     <Compile Include="Property Enums\AttributeCode.cs" />
     <Compile Include="Property Enums\GroundCode.cs" />
     <Compile Include="Property Enums\SoundID.cs" />
     <Compile Include="Property Enums\SpecialCode.cs" />
     <Compile Include="Property Enums\WallCode.cs" />
     <Compile Include="Rendering\Camera.cs" />
-    <Compile Include="Category.cs" />
+    <Compile Include="Data\Category.cs" />
     <Compile Include="Collada Tool\Collada_B_Rep\Curves\Grendgine_Collada_Circle.cs" />
     <Compile Include="Collada Tool\Collada_B_Rep\Curves\Grendgine_Collada_Curve.cs" />
     <Compile Include="Collada Tool\Collada_B_Rep\Curves\Grendgine_Collada_Curves.cs" />
@@ -452,30 +446,30 @@
     <Compile Include="Collada Tool\Types\Grendgine_Collada_SID_Name_Float.cs" />
     <Compile Include="Collada Tool\Types\Grendgine_Collada_SID_Name_String.cs" />
     <Compile Include="Collada Tool\Types\Grendgine_Collada_String_Array_String.cs" />
-    <Compile Include="Models\DAE.cs" />
-    <Compile Include="Models\DZB.cs" />
-    <Compile Include="DZBExporter.cs" />
-    <Compile Include="Group.cs" />
-    <Compile Include="Hierarchy.cs" />
+    <Compile Include="Models\Loading\DAE.cs" />
+    <Compile Include="Models\Loading\DZB.cs" />
+    <Compile Include="Models\Exporting\DZBExporter.cs" />
+    <Compile Include="Data\Group.cs" />
+    <Compile Include="Models\Exporting\Hierarchy.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Interfaces\IPickable.cs" />
     <Compile Include="Interfaces\IRenderable.cs" />
     <Compile Include="MathE.cs" />
-    <Compile Include="Property.cs" />
-    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Data\Property.cs" />
+    <Compile Include="Forms\RelayCommand.cs" />
     <Compile Include="Rendering\Renderer.cs" />
+    <Compile Include="Data\Triangle.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
-    <Compile Include="Triangle.cs" />
     <Compile Include="ViewModel.cs" />
-    <Page Include="AboutWindow.xaml">
+    <Page Include="Forms\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Forms\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -483,7 +477,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Forms\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -502,9 +496,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -513,7 +504,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="fs.glsl">
+    <None Include="Rendering\fs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -522,7 +513,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="vs.glsl">
+    <None Include="Rendering\vs.glsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -530,16 +521,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GameFormatReader.dll">
+    <Content Include="References\GameFormatReader.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="OpenTK.dll">
+    <Content Include="References\OpenTK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="OpenTK.GLControl.dll">
+    <Content Include="References\OpenTK.GLControl.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="RecentFileListLib.dll" />
+    <Content Include="References\RecentFileListLib.dll" />
     <Resource Include="Resources\ApplicationIcon.ico" />
     <Resource Include="Resources\AboutWindowLogo.png" />
   </ItemGroup>

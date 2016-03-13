@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollisionEditor", "OpenGL_in_WPF_Framework\CollisionEditor.csproj", "{9841E0B1-0D43-4BB3-A759-7620765D5ECA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollisionEditor", "WindWakerCollisionEditor\CollisionEditor.csproj", "{9841E0B1-0D43-4BB3-A759-7620765D5ECA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
