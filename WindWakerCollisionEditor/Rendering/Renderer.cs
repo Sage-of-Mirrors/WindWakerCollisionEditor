@@ -57,7 +57,20 @@ namespace WindWakerCollisionEditor
         /// <summary>
         /// Specifies the current selection type.
         /// </summary>
-        public TriSelectionType SelectionType;
+        public TriSelectionType SelectionType
+        {
+            get { return m_selectionType; }
+            set
+            {
+                if (value != m_selectionType)
+                {
+                    m_selectionType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private TriSelectionType m_selectionType;
 
         #region Camera
         /// <summary>

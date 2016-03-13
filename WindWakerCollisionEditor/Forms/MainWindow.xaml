@@ -12,9 +12,14 @@
         <loc:ViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="terrainFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="loc:TerrainType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="selectionFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="loc:TriSelectionType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
@@ -63,8 +68,8 @@
             </TreeView>
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,19,0,1" Grid.Column="2">
-            <Grid DockPanel.Dock="Right" Margin="0,1,0,0" Background="#FFC7C7C7">
-                <xctk:PropertyGrid x:Name="PropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,46" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
+            <Grid DockPanel.Dock="Right" Background="#FFC7C7C7" Height="587" VerticalAlignment="Bottom">
+                <xctk:PropertyGrid x:Name="PropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,81" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
                     <xctk:PropertyGrid.PropertyDefinitions>
                         <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the exit (SCLS) entry to use to exit the map. Set this to 63 for no exit."/>
                         <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound Effects" IsExpandable="False" Category="Collision" Description="The sound to play when Link or another object interacts with the surface."/>
@@ -89,9 +94,11 @@
                         <xctk:PropertyDefinition TargetProperties="HasSelection" IsBrowsable="False"/>
                     </xctk:PropertyGrid.PropertyDefinitions>
                 </xctk:PropertyGrid>
-                <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="7,0,0,8" Height="26" VerticalAlignment="Bottom"/>
-                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Renderer.Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
-                <Label Content="cm/s" HorizontalAlignment="Left" Margin="239,0,0,8" Height="26" VerticalAlignment="Bottom"/>
+                <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="6,0,0,47" Height="26" VerticalAlignment="Bottom"/>
+                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="134,0,0,51" Width="100" Value="{Binding Renderer.Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
+                <Label Content="cm/s" HorizontalAlignment="Left" Margin="238,0,0,47" Height="26" VerticalAlignment="Bottom"/>
+                <Label Content="Selection Type:" HorizontalAlignment="Left" Margin="6,548,0,13"/>
+                <ComboBox HorizontalAlignment="Left" SelectedValue="{Binding Renderer.SelectionType}" ItemsSource="{Binding Source={StaticResource selectionFromEnum}}" Margin="135,550,0,15" Width="100"/>
             </Grid>
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1" >
@@ -102,7 +109,7 @@
                 <Label Content="Terrain Type:" Margin="3,7,0,85" HorizontalAlignment="Left"/>
                 <Label Content="Room Number:" Margin="3,40,0,46" HorizontalAlignment="Left" Width="95"/>
                 <ComboBox Margin="98,10,0,87" SelectedValue="{Binding SelectedCategory.Terrain}" 
-					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
+					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource terrainFromEnum}}" Width="107" HorizontalAlignment="Left"/>
                 <TextBox Margin="98,41,0,55" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
                 <Label Content="Name:" HorizontalAlignment="Left" Margin="4,73,0,21"/>
                 <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding SelectedCategory.Name}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVis}}"  Width="106"/>

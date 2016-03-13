@@ -1192,6 +1192,18 @@ namespace WindWakerCollisionEditor
                     .Cast<TerrainType>();
             }
         }
+
+        /// <summary>
+        /// Returns an IEnumerable<TerrainType> collection used to populate the TerrainType selector on the main window.
+        /// </summary>
+        public IEnumerable<TriSelectionType> TriSelectionTypeValues
+        {
+            get
+            {
+                return Enum.GetValues(typeof(TriSelectionType))
+                    .Cast<TriSelectionType>();
+            }
+        }
         #endregion
     }
 }
