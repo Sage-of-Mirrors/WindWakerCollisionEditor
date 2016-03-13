@@ -295,11 +295,11 @@ namespace WindWakerCollisionEditor
         /// <param name="host">The host of the GLControl</param>
         /// <param name="grid">The PropertyGrid to associate with this ViewModel</param>
         /// <param name="fileList">The RecentFileList to associate with this ViewModel</param>
-        public void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, PropertyGrid grid, RecentFileList fileList)
+        public void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, RecentFileList fileList)
         {
             Renderer = new Renderer(ctrl, host);
 
-            SelectedTriangles = new TriangleSelectionViewModel(grid);
+            SelectedTriangles = new TriangleSelectionViewModel();
 
             m_renderer.SelectedTris += m_renderer_SelectedTris;
 

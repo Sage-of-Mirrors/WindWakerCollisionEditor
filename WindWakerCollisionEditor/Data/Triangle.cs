@@ -499,7 +499,7 @@ namespace WindWakerCollisionEditor
     {
         public ObservableCollection<Triangle> SelectedItems { get; set; }
 
-        private PropertyGrid PropGrid;
+        //private PropertyGrid PropGrid;
 
         private bool m_hasSelection;
 
@@ -523,15 +523,6 @@ namespace WindWakerCollisionEditor
             SelectedItems = new ObservableCollection<Triangle>();
 
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
-        }
-
-        public TriangleSelectionViewModel(PropertyGrid propGrid)
-        {
-            SelectedItems = new ObservableCollection<Triangle>();
-
-            SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
-
-            PropGrid = propGrid;
         }
 
         void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
