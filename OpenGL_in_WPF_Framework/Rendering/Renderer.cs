@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -22,9 +24,35 @@ namespace WindWakerCollisionEditor
         TexCoord, Normal
     }
 
-    class Renderer
+    class Renderer : INotifyPropertyChanged
     {
-        public Camera Cam;
+        #region NotifyPropertyChanged overhead
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+        public Camera Cam
+        {
+            get { return m_Camera; }
+            set
+            {
+                if (value != m_Camera)
+                {
+                    m_Camera = value;
+
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private Camera m_Camera;
 
         public List<IRenderable> RenderableObjs { get { return m_renderableObjs; } set { m_renderableObjs = value; } }
         private List<IRenderable> m_renderableObjs;

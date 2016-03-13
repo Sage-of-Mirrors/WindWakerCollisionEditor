@@ -19,7 +19,6 @@
         </ObjectDataProvider>
         <loc:NullToFalseConverter x:Key="NullToFalseConverter"/>
         <loc:ZeroToFalseConverter x:Key="ZeroToFalseConverter"/>
-        <loc:FileNameStringConverter x:Key="FileNameStringConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -64,7 +63,7 @@
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,19,0,1" Grid.Column="2">
             <Grid DockPanel.Dock="Right" Margin="0,1,0,0" Background="#FFC7C7C7">
-                <xctk:PropertyGrid x:Name="testPropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,46" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
+                <xctk:PropertyGrid x:Name="PropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,46" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
                     <xctk:PropertyGrid.PropertyDefinitions>
                         <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the exit (SCLS) entry to use to exit the map. Set this to 63 for no exit."/>
                         <xctk:PropertyDefinition TargetProperties="SoundID" DisplayName="Sound Effects" IsExpandable="False" Category="Collision" Description="The sound to play when Link or another object interacts with the surface."/>
@@ -90,7 +89,7 @@
                     </xctk:PropertyGrid.PropertyDefinitions>
                 </xctk:PropertyGrid>
                 <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="7,0,0,8" Height="26" VerticalAlignment="Bottom"/>
-                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
+                <xctk:SingleUpDown HorizontalAlignment="Left" Margin="135,0,0,11" Width="100" Value="{Binding Renderer.Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
                 <Label Content="cm/s" HorizontalAlignment="Left" Margin="239,0,0,8" Height="26" VerticalAlignment="Bottom"/>
             </Grid>
         </DockPanel>
@@ -102,7 +101,7 @@
                 <Label Content="Terrain Type:" Margin="3,7,0,40" Height="28" HorizontalAlignment="Left"/>
                 <Label Content="Room Number:" Margin="3,40,0,1" HorizontalAlignment="Left" Width="95" Height="34"/>
                 <ComboBox Margin="98,10,0,42" SelectedValue="{Binding SelectedCategory.Terrain}" 
-					SelectedValuePath="{Binding Terrain}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
+					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" Width="107" HorizontalAlignment="Left"/>
                 <TextBox Margin="98,41,0,10" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
             </Grid>
         </DockPanel>
