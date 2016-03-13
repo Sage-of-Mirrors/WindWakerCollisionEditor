@@ -7,7 +7,7 @@
         xmlns:loc="clr-namespace:WindWakerCollisionEditor"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Class="WindWakerCollisionEditor.MainWindow"
-        Title="{Binding WindowTitle}" Height="637.5" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp">
+        Title="{Binding WindowTitle}" Height="637.5" Width="996" MouseRightButtonUp="Window_MouseRightButtonUp" Icon="/CollisionEditor;component/Resources/ApplicationIcon.ico">
     <Window.DataContext>
         <loc:ViewModel/>
     </Window.DataContext>
@@ -42,16 +42,16 @@
                     <common:RecentFileList x:Name="RecentFileList"/>
                     <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>
                 </MenuItem>
-                <MenuItem Header="Edit">
+                <MenuItem Header="_Edit">
                     <MenuItem Header="_Undo" Command="{Binding OnRequestUndo}"/>
                     <MenuItem Header="_Redo" Command="{Binding OnRequestRedo}"/>
-                    <MenuItem Header="Regroup Triangles" Command="{Binding OnRequestRegroupTris}"/>
-                    <MenuItem Header="Recategorize Triangles" Command="{Binding OnRequestRecategorizeTris}"/>
+                    <MenuItem Header="Re_group Triangles" Command="{Binding OnRequestRegroupTris}"/>
+                    <MenuItem Header="Re_categorize Triangles" Command="{Binding OnRequestRecategorizeTris}"/>
                 </MenuItem>
-                <MenuItem Header="Help">
-                    <MenuItem Header="About" Command="{Binding OnRequestDisplayAbout}"/>
-                    <MenuItem Header="Wiki" Command="{Binding OnRequestOpenWiki}"/>
-                    <MenuItem Header="Report a bug..." Command="{Binding OnRequestReportBug}"/>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Command="{Binding OnRequestDisplayAbout}"/>
+                    <MenuItem Header="_Wiki" Command="{Binding OnRequestOpenWiki}"/>
+                    <MenuItem Header="_Report a bug..." Command="{Binding OnRequestReportBug}"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -68,7 +68,7 @@
             </TreeView>
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,19,0,1" Grid.Column="2">
-            <Grid DockPanel.Dock="Right" Background="#FFC7C7C7" Height="587" VerticalAlignment="Bottom">
+            <Grid DockPanel.Dock="Right" Background="#FFC7C7C7" Margin="0,1,0,0">
                 <xctk:PropertyGrid x:Name="PropGrid" ShowSearchBox="False" ShowSortOptions="False" ShowTitle="False" ShowSummary="False" SelectedObject="{Binding SelectedTriangles}" DockPanel.Dock="Bottom" Margin="1,1,0,81" RenderTransformOrigin="0.5,0.5" ShowDescriptionByTooltip="True" IsEnabled="{Binding SelectedTriangles.HasSelection}">
                     <xctk:PropertyGrid.PropertyDefinitions>
                         <xctk:PropertyDefinition TargetProperties="ExitIndex" DisplayName="Exit Index" IsExpandable="False" Category="Collision" Description="The index of the exit (SCLS) entry to use to exit the map. Set this to 63 for no exit."/>
@@ -97,8 +97,8 @@
                 <Label Content="Camera Move Speed:" HorizontalAlignment="Left" Margin="6,0,0,47" Height="26" VerticalAlignment="Bottom"/>
                 <xctk:SingleUpDown HorizontalAlignment="Left" Margin="134,0,0,51" Width="100" Value="{Binding Renderer.Cam.MoveSpeed}" Height="20" VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="{x:Null}" Minimum="100"/>
                 <Label Content="cm/s" HorizontalAlignment="Left" Margin="238,0,0,47" Height="26" VerticalAlignment="Bottom"/>
-                <Label Content="Selection Type:" HorizontalAlignment="Left" Margin="6,548,0,13"/>
-                <ComboBox HorizontalAlignment="Left" SelectedValue="{Binding Renderer.SelectionType}" ItemsSource="{Binding Source={StaticResource selectionFromEnum}}" Margin="135,550,0,15" Width="100"/>
+                <Label Content="Selection Type:" HorizontalAlignment="Left" Margin="6,0,0,13" Height="26" VerticalAlignment="Bottom"/>
+                <ComboBox HorizontalAlignment="Left" SelectedValue="{Binding Renderer.SelectionType}" ItemsSource="{Binding Source={StaticResource selectionFromEnum}}" Margin="135,0,0,15" Width="100" Height="22" VerticalAlignment="Bottom"/>
             </Grid>
         </DockPanel>
         <DockPanel LastChildFill="True" Margin="0,20,0,0" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" Grid.Column="1" >

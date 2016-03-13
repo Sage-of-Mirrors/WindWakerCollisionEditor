@@ -26,7 +26,7 @@ namespace WindWakerCollisionEditor
 		Ice = 0x0F,
 		Wood_Hollow = 0x10,
 		Metal_Grate = 0x11,
-		Water_Windfall = 0x12,
+		Water_Ocean = 0x12,
 		Water = 0x13,
 		Metal = 0x14,
 		Respawn_Frozen = 0x15,

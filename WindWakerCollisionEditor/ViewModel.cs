@@ -581,6 +581,9 @@ namespace WindWakerCollisionEditor
         /// <param name="e"></param>
         void m_tree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            SelectedCategory = null;
+            SelectedGroup = null;
+
             if ((e.NewValue != null) && (e.NewValue.GetType() == typeof(Group)))
             {
                 Group grp = e.NewValue as Group;

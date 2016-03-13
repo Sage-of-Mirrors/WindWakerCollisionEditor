@@ -524,16 +524,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="References\GameFormatReader.dll">
+    <Content Include="libs\GameFormatReader.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="References\OpenTK.dll">
+    <Content Include="libs\OpenTK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="References\OpenTK.GLControl.dll">
+    <Content Include="libs\OpenTK.GLControl.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="References\RecentFileListLib.dll" />
+    <Content Include="libs\RecentFileListLib.dll" />
     <Resource Include="Resources\ApplicationIcon.ico" />
     <Resource Include="Resources\AboutWindowLogo.png" />
   </ItemGroup>
