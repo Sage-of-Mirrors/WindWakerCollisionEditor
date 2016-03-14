@@ -112,8 +112,8 @@
 					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource terrainFromEnum}}" Width="107" HorizontalAlignment="Left"/>
                 <TextBox Margin="98,41,0,55" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
                 <Label Content="Name:" HorizontalAlignment="Left" Margin="4,73,0,21"/>
-                <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding SelectedCategory.Name}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVis}}"  Width="106"/>
-                <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding SelectedGroup.Name}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedGroup, Converter={StaticResource NullToVis}}"  Width="106"/>
+                <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding Mode=TwoWay, Path=SelectedCategory.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVis}}"  Width="106"/>
+                <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding Mode=TwoWay, Path=SelectedGroup.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedGroup, Converter={StaticResource NullToVis}}"  Width="106"/>
             </Grid>
         </DockPanel>
     </Grid>

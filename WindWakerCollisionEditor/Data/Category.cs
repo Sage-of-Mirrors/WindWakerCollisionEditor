@@ -25,6 +25,8 @@ namespace WindWakerCollisionEditor
 
         private static int m_nameAddInt;
 
+        public event EventHandler<UndoRedoEventArgs> UndoRedoCommandEventArgs;
+
         public string Name
         {
             get { return m_name; }
@@ -32,6 +34,12 @@ namespace WindWakerCollisionEditor
             {
                 if (value != m_name)
                 {
+                    UndoRedoEventArgs args = new UndoRedoEventArgs();
+
+                    args.cmd = new NameUndoRedo(m_name, value, this);
+
+                    OnNameChange(args);
+
                     m_name = value;
 
                     NotifyPropertyChanged();
@@ -40,6 +48,13 @@ namespace WindWakerCollisionEditor
         }
 
         private string m_name;
+
+        public void SetName(string name)
+        {
+            m_name = name;
+
+            NotifyPropertyChanged("Name");
+        }
 
         public BindingList<Group> Groups
         {
@@ -110,6 +125,14 @@ namespace WindWakerCollisionEditor
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        protected virtual void OnNameChange(UndoRedoEventArgs e)
+        {
+            EventHandler<UndoRedoEventArgs> handler = UndoRedoCommandEventArgs;
+
+            if (handler != null)
+                handler(this, e);
         }
     }
 }

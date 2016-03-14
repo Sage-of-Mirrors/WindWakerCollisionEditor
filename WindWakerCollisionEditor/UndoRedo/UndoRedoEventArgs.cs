@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OpenTK;
 
 namespace WindWakerCollisionEditor
 {
-    interface IPickable
+    public class UndoRedoEventArgs : EventArgs
     {
-        bool IsRayColliding(Vector3 eye, Vector3 ray);
+        public IUndoRedoCommand cmd;
     }
 }

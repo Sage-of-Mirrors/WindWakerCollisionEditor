@@ -103,9 +103,11 @@
     <Compile Include="Bounding Box\AABB.cs" />
     <Compile Include="Data\SelectTriangleEventArgs.cs" />
     <Compile Include="Forms\AboutWindow.cs" />
+    <Compile Include="Interfaces\IUndoRedoCommand.cs" />
     <Compile Include="Octree\Octet.cs" />
     <Compile Include="Property Enums\AttributeCode.cs" />
     <Compile Include="Property Enums\GroundCode.cs" />
+    <Compile Include="Property Enums\PropertyType.cs" />
     <Compile Include="Property Enums\SoundID.cs" />
     <Compile Include="Property Enums\SpecialCode.cs" />
     <Compile Include="Property Enums\WallCode.cs" />
@@ -467,6 +469,10 @@
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="TriSelectionType.cs" />
+    <Compile Include="UndoRedo\NameUndoRedo.cs" />
+    <Compile Include="UndoRedo\PropertyUndoRedo.cs" />
+    <Compile Include="UndoRedo\UndoRedoEventArgs.cs" />
+    <Compile Include="UndoRedo\UndoRedoManager.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="Forms\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -554,6 +560,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

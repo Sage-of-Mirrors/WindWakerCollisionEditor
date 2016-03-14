@@ -215,6 +215,8 @@ namespace WindWakerCollisionEditor
 
         private TriangleSelectionViewModel m_selectedViewTriangles;
 
+        private UndoRedoManager m_undoRedoManager;
+
         #endregion
 
         #region Rendering
@@ -308,6 +310,8 @@ namespace WindWakerCollisionEditor
             m_renderer.RecategorizeTris += m_renderer_RecategorizeTris;
 
             m_renderer.FocusCamera += m_renderer_FocusCamera;
+
+            m_undoRedoManager = new UndoRedoManager();
 
             m_recentFileList = fileList;
 
@@ -420,7 +424,17 @@ namespace WindWakerCollisionEditor
 
             Categories = nativeCol.GetCategories();
 
+            foreach (Category cat in Categories)
+            {
+                cat.UndoRedoCommandEventArgs += cat_UndoRedoCommandEventArgs;
+            }
+
             AddRenderableObjs();
+        }
+
+        void cat_UndoRedoCommandEventArgs(object sender, UndoRedoEventArgs e)
+        {
+            m_undoRedoManager.AddUndoableCommand(e.cmd);
         }
         #endregion
 
@@ -1066,6 +1080,8 @@ namespace WindWakerCollisionEditor
 
                 isDataLoaded = false;
 
+                m_undoRedoManager.Clear();
+
                 CurrentFile = "";
             }
         }
@@ -1137,13 +1153,13 @@ namespace WindWakerCollisionEditor
         /// <summary> The user has requested to undo the last action. Only available if they've made an undoable action. </summary>
         public ICommand OnRequestUndo
         {
-            get { return new RelayCommand(x => { return; }, x => false); }
+            get { return new RelayCommand(x => m_undoRedoManager.Undo(), x => m_undoRedoManager.CanUndo()); }
         }
 
         /// <summary> The user has requested to redo the last undo action. Only available if they've undone an action. </summary>
         public ICommand OnRequestRedo
         {
-            get { return new RelayCommand(x => { return; }, x => false); }
+            get { return new RelayCommand(x => m_undoRedoManager.Redo(), x => m_undoRedoManager.CanRedo()); }
         }
 
         /// <summary> The user has requested to regroup the currently selected Triangles. Only available if there is a one or more currently selected objects. </summary>
