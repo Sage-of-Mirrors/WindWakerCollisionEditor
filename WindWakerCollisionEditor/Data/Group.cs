@@ -190,6 +190,25 @@ namespace WindWakerCollisionEditor
             m_notObjBuffer = new List<int>();
         }
 
+        public Group(string name)
+        {
+            m_name = name;
+
+            m_triangles = new BindingList<Triangle>();
+
+            m_terrain = TerrainType.Land;
+
+            m_translation = new Vector3();
+
+            m_rotation = new Vector3();
+
+            m_scale = Vector3.One;
+
+            m_selObjBuffer = new List<int>();
+
+            m_notObjBuffer = new List<int>();
+        }
+
         public void CreateBufferObjects()
         {
             m_vertexBuffer = new List<Vector3>();

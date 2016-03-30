@@ -88,11 +88,11 @@
     <Reference Include="WindowsFormsIntegration" />
     <Reference Include="Xceed.Wpf.DataGrid, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Xceed.Wpf.DataGrid.dll</HintPath>
+      <HintPath>libs\Xceed.Wpf.DataGrid.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>libs\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +104,9 @@
     <Compile Include="Data\SelectTriangleEventArgs.cs" />
     <Compile Include="Forms\AboutWindow.cs" />
     <Compile Include="Interfaces\IUndoRedoCommand.cs" />
+    <Compile Include="Models\Loading\ARC.cs" />
+    <Compile Include="Models\Loading\IModelSource.cs" />
+    <Compile Include="Models\Loading\OBJ.cs" />
     <Compile Include="Octree\Octet.cs" />
     <Compile Include="Property Enums\AttributeCode.cs" />
     <Compile Include="Property Enums\GroundCode.cs" />
@@ -540,6 +543,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="libs\RecentFileListLib.dll" />
+    <Content Include="libs\Xceed.Wpf.DataGrid.dll" />
+    <Content Include="libs\Xceed.Wpf.Toolkit.dll" />
     <Resource Include="Resources\ApplicationIcon.ico" />
     <Resource Include="Resources\AboutWindowLogo.png" />
   </ItemGroup>

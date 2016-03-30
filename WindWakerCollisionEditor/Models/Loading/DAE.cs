@@ -63,7 +63,6 @@ namespace WindWakerCollisionEditor
             }
         }
 
-
         private List<Vector3> GetVerts(Grendgine_Collada_Geometry source)
         {
             float[] positions = source.Mesh.Source[0].Float_Array.Value();

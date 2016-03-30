@@ -80,6 +80,13 @@ namespace WindWakerCollisionEditor
             m_groups = new BindingList<Group>();
         }
 
+        public Category(string name)
+        {
+            m_name = name;
+
+            m_groups = new BindingList<Group>();
+        }
+
         public Category(EndianBinaryReader stream)
         {
             m_groups = new BindingList<Group>();

@@ -329,7 +329,7 @@ namespace WindWakerCollisionEditor
         {
             OpenFileDialog openFile = new OpenFileDialog();
 
-            openFile.Filter = "All Supported Types (*.dae, *.dzb, *.arc, *.rarc)|*.arc;*.rarc;*.dae;*.dzb|DAE Files (*.dae)|*.dae|DZB Files (*.dzb)|*.dzb|ARC Files (*.arc)|*.arc|RARC Files (*.rarc)|*.rarc";
+            openFile.Filter = "All Supported Types (*.dae, *.obj, *.dzb, *.arc, *.rarc)|*.arc;*.rarc;*.dae;*.dzb;*.obj|DAE Files (*.dae)|*.dae|OBJ Files (*.obj)|*.obj|DZB Files (*.dzb)|*.dzb|ARC Files (*.arc)|*.arc|RARC Files (*.rarc)|*.rarc";
 
             if (openFile.ShowDialog() == true)
             {
@@ -347,6 +347,8 @@ namespace WindWakerCollisionEditor
             {
                 Close();
             }
+
+            IModelSource source = null;
 
             try
             {
@@ -370,7 +372,12 @@ namespace WindWakerCollisionEditor
                                 GetDzbData(reader);
                             }
                             break;
+                        case "obj":
+                            source = new OBJ();
+                            break;
                     }
+
+                    Categories = (ObservableCollection<Category>)source.Load(fileName);
 
                     FocusCameraAll();
 

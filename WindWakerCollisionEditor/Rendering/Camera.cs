@@ -100,6 +100,16 @@ namespace WindWakerCollisionEditor
                 moveDir -= Vector3.UnitX;
             }
 
+            if (Input.GetKey(Keys.Q))
+            {
+                moveDir += Vector3.UnitY;
+            }
+
+            if (Input.GetKey(Keys.E))
+            {
+                moveDir -= Vector3.UnitY;
+            }
+
             if (Input.GetMouseButton(1))
             {
                 Rotate(Input.MouseDelta.X, Input.MouseDelta.Y);
