@@ -55,6 +55,13 @@ namespace WindWakerCollisionEditor
                             break;
                     }
                 }
+
+                // We have to generate rendering stuff for each group
+                foreach (Category cat in m_catList)
+                {
+                    foreach (Group grp in cat.Groups)
+                        grp.CreateBufferObjects();
+                }
             }
 
             return m_catList;

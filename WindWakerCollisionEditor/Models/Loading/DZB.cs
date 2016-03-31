@@ -6,16 +6,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using GameFormatReader.Common;
 using OpenTK;
 
 namespace WindWakerCollisionEditor
 {
-    class DZB
+    class DZB : IModelSource
     {
         List<Vector3> Vertexes;
         List<Triangle> Faces;
         List<Property> Properties;
-        List<Category> Categories;
+        ObservableCollection<Category> Categories;
 
         int VertexCount;
         int FaceCount;
@@ -27,79 +29,83 @@ namespace WindWakerCollisionEditor
         int PropertyStartOffset;
         int GroupStartOffset;
 
-        public DZB(EndianBinaryReader stream)
+        public DZB()
         {
-            VertexCount = stream.ReadInt32();
-            VertexStartOffset = stream.ReadInt32();
+            Categories = new ObservableCollection<Category>();
+        }
 
-            FaceCount = stream.ReadInt32();
-            FaceStartOffset = stream.ReadInt32();
+        // Keeping this for posterity until Load(string fileName) is proven to work
+        public DZB(EndianBinaryReader reader)
+        {
+            VertexCount = reader.ReadInt32();
+            VertexStartOffset = reader.ReadInt32();
 
-            stream.BaseStream.Position = 0x20;
+            FaceCount = reader.ReadInt32();
+            FaceStartOffset = reader.ReadInt32();
 
-            GroupCount = stream.ReadInt32();
-            GroupStartOffset = 0x34 + stream.ReadInt32();
+            reader.BaseStream.Position = 0x20;
 
-            PropertyCount = stream.ReadInt32();
-            PropertyStartOffset = stream.ReadInt32();
+            GroupCount = reader.ReadInt32();
+            GroupStartOffset = 0x34 + reader.ReadInt32();
+
+            PropertyCount = reader.ReadInt32();
+            PropertyStartOffset = reader.ReadInt32();
 
             Vertexes = new List<Vector3>();
 
-            stream.BaseStream.Position = 0x34;
+            reader.BaseStream.Position = 0x34;
 
             for (int i = 0; i < VertexCount; i++)
             {
-                Vector3 tempVec = new Vector3(stream.ReadSingle(), stream.ReadSingle(), stream.ReadSingle());
+                Vector3 tempVec = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
                 Vertexes.Add(tempVec);
             }
 
             Properties = new List<Property>();
 
-            stream.BaseStream.Position = PropertyStartOffset;
+            reader.BaseStream.Position = PropertyStartOffset;
 
             for (int i = 0; i < PropertyCount; i++)
             {
-                Property tempProp = new Property(stream);
+                Property tempProp = new Property(reader);
 
                 Properties.Add(tempProp);
             }
 
             Faces = new List<Triangle>();
 
-            stream.BaseStream.Position = FaceStartOffset;
+            reader.BaseStream.Position = FaceStartOffset;
 
             for (int i = 0; i < FaceCount; i++)
             {
-                Triangle face = new Triangle(Vertexes[stream.ReadInt16()], Vertexes[stream.ReadInt16()],
-                    Vertexes[stream.ReadInt16()], Properties[stream.ReadInt16()], stream.ReadInt16());
+                Triangle face = new Triangle(Vertexes[reader.ReadInt16()], Vertexes[reader.ReadInt16()],
+                    Vertexes[reader.ReadInt16()], Properties[reader.ReadInt16()], reader.ReadInt16());
 
                 Faces.Add(face);
             }
 
-            stream.BaseStream.Position = GroupStartOffset;
-
-            Categories = new List<Category>();
+            reader.BaseStream.Position = GroupStartOffset;
 
             for (int i = 1; i < GroupCount; i++)
             {
-                int groupStartPos = (int)stream.BaseStream.Position;
+                int groupStartPos = (int)reader.BaseStream.Position;
 
-                stream.BaseStream.Position += 0x24;
+                reader.BaseStream.Position += 0x24;
 
-                short parentIndex = stream.ReadInt16();
+                short parentIndex = reader.ReadInt16();
 
-                stream.BaseStream.Position += 0x8;
+                reader.BaseStream.Position += 0x8;
 
-                short octreeIndex = stream.ReadInt16();
+                short octreeIndex = reader.ReadInt16();
 
-                stream.BaseStream.Position = groupStartPos;
+                reader.BaseStream.Position = groupStartPos;
 
                 //If octreeIndex is not -1, then that means this data 
                 //is a group and has face data associated with it
                 if (octreeIndex >= 0)
                 {
-                    Group geo = new Group(stream);
+                    Group geo = new Group(reader);
 
                     foreach (Triangle face in Faces)
                     {
@@ -132,7 +138,7 @@ namespace WindWakerCollisionEditor
                 //face data.
                 else if (octreeIndex == -1)
                 {
-                    Category cat = new Category(stream);
+                    Category cat = new Category(reader);
 
                     cat.InitialIndex = i;
 
@@ -160,9 +166,129 @@ namespace WindWakerCollisionEditor
             }
         }
 
+        // Keeping this for posterity until Load(string fileName) is proven to work
         public ObservableCollection<Category> GetCategories()
         {
-            return new ObservableCollection<Category>(Categories);
+            return Categories;
+        }
+
+        public IEnumerable<Category> Load(string fileName)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            {
+                EndianBinaryReader reader = new EndianBinaryReader(stream, Endian.Big);
+
+                VertexCount = reader.ReadInt32();
+                VertexStartOffset = reader.ReadInt32();
+
+                FaceCount = reader.ReadInt32();
+                FaceStartOffset = reader.ReadInt32();
+
+                reader.BaseStream.Position = 0x20;
+
+                GroupCount = reader.ReadInt32();
+                GroupStartOffset = 0x34 + reader.ReadInt32();
+
+                PropertyCount = reader.ReadInt32();
+                PropertyStartOffset = reader.ReadInt32();
+
+                Vertexes = new List<Vector3>();
+
+                reader.BaseStream.Position = 0x34;
+
+                for (int i = 0; i < VertexCount; i++)
+                {
+                    Vector3 tempVec = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+
+                    Vertexes.Add(tempVec);
+                }
+
+                Properties = new List<Property>();
+
+                reader.BaseStream.Position = PropertyStartOffset;
+
+                for (int i = 0; i < PropertyCount; i++)
+                {
+                    Property tempProp = new Property(reader);
+
+                    Properties.Add(tempProp);
+                }
+
+                Faces = new List<Triangle>();
+
+                reader.BaseStream.Position = FaceStartOffset;
+
+                for (int i = 0; i < FaceCount; i++)
+                {
+                    Triangle face = new Triangle(Vertexes[reader.ReadInt16()], Vertexes[reader.ReadInt16()],
+                        Vertexes[reader.ReadInt16()], Properties[reader.ReadInt16()], reader.ReadInt16());
+
+                    Faces.Add(face);
+                }
+
+                reader.BaseStream.Position = GroupStartOffset;
+
+                for (int i = 1; i < GroupCount; i++)
+                {
+                    int groupStartPos = (int)reader.BaseStream.Position;
+
+                    reader.BaseStream.Position += 0x24;
+
+                    short parentIndex = reader.ReadInt16();
+
+                    reader.BaseStream.Position += 0x8;
+
+                    short octreeIndex = reader.ReadInt16();
+
+                    reader.BaseStream.Position = groupStartPos;
+
+                    //If octreeIndex is not -1, then that means this data 
+                    //is a group and has face data associated with it
+                    if (octreeIndex >= 0)
+                    {
+                        Group geo = new Group(reader);
+
+                        foreach (Triangle face in Faces)
+                        {
+                            if (face.GroupIndex == i)
+                            {
+                                face.ParentGroup = geo;
+
+                                geo.Triangles.Add(face);
+                            }
+                        }
+
+                        geo.CreateBufferObjects();
+
+                        foreach (Category cat in Categories)
+                        {
+                            if (cat.InitialIndex == parentIndex)
+                            {
+                                geo.GroupCategory = cat;
+
+                                cat.Terrain = geo.Terrain;
+
+                                cat.RoomNumber = geo.RoomNumber;
+
+                                cat.Groups.Add(geo);
+                            }
+                        }
+                    }
+
+                    //If octreeIndex is -1, then we treat this data as a Category, with no
+                    //face data.
+                    else if (octreeIndex == -1)
+                    {
+                        Category cat = new Category(reader);
+
+                        cat.InitialIndex = i;
+
+                        Categories.Add(cat);
+                    }
+                }
+            }
+
+            return Categories;
         }
     }
 }

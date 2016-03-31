@@ -360,24 +360,26 @@ namespace WindWakerCollisionEditor
                     {
                         case "arc":
                         case "rarc":
+                            source = new ARC();
                             break;
                         case "dae":
-                            GetDaeData(fileName);
+                            source = new DAE();
                             break;
                         case "dzb":
-                            using (FileStream stream = new FileStream(fileName, FileMode.Open))
-                            {
-                                EndianBinaryReader reader = new EndianBinaryReader(stream, Endian.Big);
-
-                                GetDzbData(reader);
-                            }
+                            source = new DZB();
                             break;
                         case "obj":
                             source = new OBJ();
                             break;
+                        default:
+                            Console.WriteLine("Unknown file type " + 
+                                fileNameExtension[fileNameExtension.Count() - 1] + ". Aborting...");
+                            return;
                     }
 
                     Categories = (ObservableCollection<Category>)source.Load(fileName);
+
+                    AddRenderableObjs();
 
                     FocusCameraAll();
 
@@ -398,45 +400,6 @@ namespace WindWakerCollisionEditor
                     m_recentFileList.RemoveFile(fileName);
                 }
             }
-        }
-
-        /// <summary>
-        /// Reads an archive into the program and extracts a .dzb file from it.
-        /// </summary>
-        private void GetArcData()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Reads a .dae model into a Category list.
-        /// </summary>
-        /// <param name="fileName">Filename of the .dae to read into the program</param>
-        private void GetDaeData(string fileName)
-        {
-            DAE importedCol = new DAE(fileName);
-
-            Categories = importedCol.GetCategories();
-
-            AddRenderableObjs();
-        }
-
-        /// <summary>
-        /// Reads a .dzb file into a Category list.
-        /// </summary>
-        /// <param name="stream">Stream representing a .dzb file</param>
-        private void GetDzbData(EndianBinaryReader stream)
-        {
-            DZB nativeCol = new DZB(stream);
-
-            Categories = nativeCol.GetCategories();
-
-            foreach (Category cat in Categories)
-            {
-                cat.UndoRedoCommandEventArgs += cat_UndoRedoCommandEventArgs;
-            }
-
-            AddRenderableObjs();
         }
 
         void cat_UndoRedoCommandEventArgs(object sender, UndoRedoEventArgs e)

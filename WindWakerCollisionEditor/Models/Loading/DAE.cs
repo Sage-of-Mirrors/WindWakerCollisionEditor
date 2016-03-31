@@ -10,10 +10,16 @@ using OpenTK;
 
 namespace WindWakerCollisionEditor
 {
-    class DAE
+    class DAE : IModelSource
     {
         ObservableCollection<Category> categoryCollection;
 
+        public DAE()
+        {
+            categoryCollection = new ObservableCollection<Category>();
+        }
+
+        // Keeping this for posterity until Load(string fileName) is proven to work
         public DAE(string fileName)
         {
             categoryCollection = new ObservableCollection<Category>();
@@ -124,8 +130,60 @@ namespace WindWakerCollisionEditor
             return indexes;
         }
 
+        // Keeping this for posterity until Load(string fileName) is proven to work
         public ObservableCollection<Category> GetCategories()
         {
+            return categoryCollection;
+        }
+
+        public IEnumerable<Category> Load(string fileName)
+        {
+            categoryCollection = new ObservableCollection<Category>();
+
+            Grendgine_Collada file = Grendgine_Collada.Grendgine_Load_File(fileName);
+
+            for (int i = 0; i < file.Library_Geometries.Geometry.Length; i++)
+            {
+                Category cat = new Category();
+
+                cat.Name = file.Library_Geometries.Geometry[i].Name + "_parent";
+
+                List<Vector3> verts = GetVerts(file.Library_Geometries.Geometry[i]);
+
+                int skipValue = CalcSkipValue(file.Library_Geometries.Geometry[i]);
+
+                Group grp = new Group();
+
+                grp.Name = file.Library_Geometries.Geometry[i].Name;
+
+                int[] pList = file.Library_Geometries.Geometry[i].Mesh.Polylist[0].P.Value();
+
+                List<int> vertIndexes = GetVertIndexes(pList, skipValue);
+
+                for (int j = 0; j < vertIndexes.Count; j += 3)
+                {
+                    Triangle face = new Triangle();
+
+                    face.Vertex1 = verts[vertIndexes[j]];
+
+                    face.Vertex2 = verts[vertIndexes[j + 1]];
+
+                    face.Vertex3 = verts[vertIndexes[j + 2]];
+
+                    face.ParentGroup = grp;
+
+                    grp.Triangles.Add(face);
+                }
+
+                grp.CreateBufferObjects();
+
+                grp.GroupCategory = cat;
+
+                cat.Groups.Add(grp);
+
+                categoryCollection.Add(cat);
+            }
+
             return categoryCollection;
         }
     }
