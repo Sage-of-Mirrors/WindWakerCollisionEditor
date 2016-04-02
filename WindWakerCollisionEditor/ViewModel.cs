@@ -19,7 +19,7 @@ using System.Windows.Forms.Integration;
 using System.IO;
 using Microsoft.Win32;
 using GameFormatReader.Common;
-using GameFormatReader.GCWii.Binaries.GC;
+//using GameFormatReader.GCWii.Binaries.GC;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
@@ -378,6 +378,15 @@ namespace WindWakerCollisionEditor
                     }
 
                     Categories = (ObservableCollection<Category>)source.Load(fileName);
+
+                    // Probably a hotfix. If the user tried to open an archive, but the archive didn't have any DZBs in it,
+                    // the archive loader will return null.
+                    if (Categories == null)
+                    {
+                        MessageBox.Show("The archive you opened did not contain any DZB collision files.", "No DZB files found");
+
+                        return;
+                    }
 
                     AddRenderableObjs();
 

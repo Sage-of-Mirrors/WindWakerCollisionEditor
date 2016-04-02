@@ -40,7 +40,9 @@ namespace WindWakerCollisionEditor
                                                     Convert.ToSingle(decompLine[3])));
                             break;
                         case "f":
-                            curGroup.Triangles.Add(GetTriangle(decompLine));
+                            Triangle newTri = GetTriangle(decompLine);
+                            newTri.ParentGroup = curGroup;
+                            curGroup.Triangles.Add(newTri);
                             break;
                         case "o":
                             Category tempCat = new Category(decompLine[1]);
