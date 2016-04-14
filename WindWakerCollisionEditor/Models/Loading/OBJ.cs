@@ -45,6 +45,7 @@ namespace WindWakerCollisionEditor
                             curGroup.Triangles.Add(newTri);
                             break;
                         case "o":
+                        case "g":
                             Category tempCat = new Category(decompLine[1]);
                             Group grp = new Group(decompLine[1]);
                             grp.GroupCategory = tempCat;

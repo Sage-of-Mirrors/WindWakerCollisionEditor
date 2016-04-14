@@ -16,7 +16,7 @@ namespace WindWakerCollisionEditor
         Code5 = 0x05,
         Code6 = 0x06,
         Code7 = 0x07,
-        Code8 = 0x08,
+        Slope = 0x08,
         Code9 = 0x09,
         Code10 = 0x0A,
         Code11 = 0x0B,
