@@ -43,8 +43,6 @@
                     <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>
                 </MenuItem>
                 <MenuItem Header="_Edit">
-                    <MenuItem Header="_Undo" Command="{Binding OnRequestUndo}"/>
-                    <MenuItem Header="_Redo" Command="{Binding OnRequestRedo}"/>
                     <MenuItem Header="Re_group Triangles" Command="{Binding OnRequestRegroupTris}"/>
                     <MenuItem Header="Re_categorize Triangles" Command="{Binding OnRequestRecategorizeTris}"/>
                 </MenuItem>

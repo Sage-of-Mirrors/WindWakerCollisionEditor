@@ -385,7 +385,7 @@ namespace WindWakerCollisionEditor
 
         public Property()
         {
-
+            ExitIndex = 63;
         }
 
         public Property(EndianBinaryReader reader)

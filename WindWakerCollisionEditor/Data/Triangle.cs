@@ -454,7 +454,7 @@ namespace WindWakerCollisionEditor
 
         public Triangle()
         {
-
+            ExitIndex = 63;
         }
 
         public Triangle(Vector3 vert1, Vector3 vert2, Vector3 vert3, Property prop, int groupIndex)
@@ -592,12 +592,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.ExitIndex = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.ExitIndex = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 

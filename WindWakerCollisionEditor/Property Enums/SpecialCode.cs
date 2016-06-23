@@ -11,7 +11,7 @@ namespace WindWakerCollisionEditor
         Normal = 0x0,
         Force_Slide1 = 0x1,
         Force_Slide2 = 0x2,
-        Inivisble_Wall = 0x3,
+        No_Sidle = 0x3,
         Code5 = 0x4,
         Code6 = 0x5,
         Code7 = 0x6,

@@ -100,12 +100,12 @@ namespace WindWakerCollisionEditor
                 moveDir -= Vector3.UnitX;
             }
 
-            if (Input.GetKey(Keys.Q))
+            if (Input.GetKey(Keys.E))
             {
                 moveDir += Vector3.UnitY;
             }
 
-            if (Input.GetKey(Keys.E))
+            if (Input.GetKey(Keys.Q))
             {
                 moveDir -= Vector3.UnitY;
             }
@@ -115,7 +115,7 @@ namespace WindWakerCollisionEditor
                 Rotate(Input.MouseDelta.X, Input.MouseDelta.Y);
             }
 
-            float moveSpeed = Input.GetKey(Keys.Space) ? MoveSpeed * 10f : MoveSpeed;
+            float moveSpeed = Input.GetKey(Keys.LShiftKey) ? MoveSpeed * 10f : MoveSpeed;
 
             int scrollSensitivity = 300;
 
