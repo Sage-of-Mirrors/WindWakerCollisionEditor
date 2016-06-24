@@ -698,8 +698,8 @@ namespace WindWakerCollisionEditor
             {
                 if (SelectedItems.Count == 0)
                     return -1;
-                if (SelectedItems.IsSameValue(i => i.CameraID))
-                    return SelectedItems[0].CameraID;
+                if (SelectedItems.IsSameValue(i => i.RoomCamID))
+                    return SelectedItems[0].RoomCamID;
                 return -1;
             }
 
@@ -707,7 +707,7 @@ namespace WindWakerCollisionEditor
             {
                 foreach (Triangle tri in SelectedItems)
                 {
-                    tri.CameraID = value;
+                    tri.RoomCamID = value;
                 }
 
                 NotifyPropertyChanged();
