@@ -455,6 +455,14 @@ namespace WindWakerCollisionEditor
         public Triangle()
         {
             ExitIndex = 63;
+            LinkNumber = 255;
+            PolyColor = 255;
+
+            m_roomPathID = 255;
+            m_roomPathPntNo = -1;
+
+            m_roomCamID = 255;
+            m_camID = 255;
         }
 
         public Triangle(Vector3 vert1, Vector3 vert2, Vector3 vert3, Property prop, int groupIndex)
@@ -661,12 +669,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.LinkNumber = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.LinkNumber = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -705,12 +716,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.RoomCamID = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.RoomCamID = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -727,12 +741,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.CamMoveBG = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.CamMoveBG = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -749,12 +766,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.RoomPathID = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.RoomPathID = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -771,12 +791,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.RoomPathPointNo = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.RoomPathPointNo = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -793,12 +816,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.PolyColor = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.PolyColor = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 
@@ -837,12 +863,15 @@ namespace WindWakerCollisionEditor
 
             set
             {
-                foreach (Triangle tri in SelectedItems)
+                if (SelectedItems != null)
                 {
-                    tri.CameraID = value;
-                }
+                    foreach (Triangle tri in SelectedItems)
+                    {
+                        tri.CameraID = value;
+                    }
 
-                NotifyPropertyChanged();
+                    NotifyPropertyChanged();
+                }
             }
         }
 

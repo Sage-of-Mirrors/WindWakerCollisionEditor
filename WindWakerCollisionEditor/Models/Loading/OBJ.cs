@@ -30,7 +30,12 @@ namespace WindWakerCollisionEditor
 
                 while (!reader.EndOfStream)
                 {
-                    string[] decompLine = reader.ReadLine().Split(' ');
+                    string line = reader.ReadLine();
+
+                    if (line.Length == 0)
+                        continue;
+
+                    string[] decompLine = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                     switch(decompLine[0])
                     {
