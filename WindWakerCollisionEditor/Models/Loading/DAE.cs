@@ -71,6 +71,11 @@ namespace WindWakerCollisionEditor
 
         private List<Vector3> GetVerts(Grendgine_Collada_Geometry source)
         {
+            // Horrible sanitization of 3dsmax's collada data
+            string posFloatArray = source.Mesh.Source[0].Float_Array.Value_As_String;
+            posFloatArray = posFloatArray.Replace('\n', ' ').Trim();
+            source.Mesh.Source[0].Float_Array.Value_As_String = posFloatArray;
+
             float[] positions = source.Mesh.Source[0].Float_Array.Value();
 
             List<Vector3> verts = new List<Vector3>();
@@ -99,19 +104,30 @@ namespace WindWakerCollisionEditor
         {
             int skipVal = 0;
 
-            for (int i = 0; i < source.Mesh.Polylist[0].Input.Length; i++)
+            if (source.Mesh.Polylist == null)
             {
-                switch (source.Mesh.Polylist[0].Input[i].Semantic)
+                for (int i = 0; i < source.Mesh.Source.Length; i++)
                 {
-                    case Grendgine_Collada_Input_Semantic.VERTEX:
-                        skipVal += 1;
-                        break;
-                    case Grendgine_Collada_Input_Semantic.NORMAL:
-                        skipVal += 1;
-                        break;
-                    case Grendgine_Collada_Input_Semantic.TEXCOORD:
-                        skipVal += 1;
-                        break;
+                    skipVal += 1;
+                }
+            }
+
+            else
+            {
+                for (int i = 0; i < source.Mesh.Polylist[0].Input.Length; i++)
+                {
+                    switch (source.Mesh.Polylist[0].Input[i].Semantic)
+                    {
+                        case Grendgine_Collada_Input_Semantic.VERTEX:
+                            skipVal += 1;
+                            break;
+                        case Grendgine_Collada_Input_Semantic.NORMAL:
+                            skipVal += 1;
+                            break;
+                        case Grendgine_Collada_Input_Semantic.TEXCOORD:
+                            skipVal += 1;
+                            break;
+                    }
                 }
             }
 
@@ -156,7 +172,22 @@ namespace WindWakerCollisionEditor
 
                 grp.Name = file.Library_Geometries.Geometry[i].Name;
 
-                int[] pList = file.Library_Geometries.Geometry[i].Mesh.Polylist[0].P.Value();
+                int[] pList = null;
+
+                if (file.Library_Geometries.Geometry[i].Mesh.Polylist == null)
+                {
+                    // Horrible sanitization of 3dsmax's collada data
+                    string plist = file.Library_Geometries.Geometry[i].Mesh.Triangles[0].P.Value_As_String;
+                    plist = plist.Replace('\n', ' ').Trim();
+                    file.Library_Geometries.Geometry[i].Mesh.Triangles[0].P.Value_As_String = plist;
+
+                    pList = file.Library_Geometries.Geometry[i].Mesh.Triangles[0].P.Value();
+                }
+
+                else
+                {
+                    pList = file.Library_Geometries.Geometry[i].Mesh.Polylist[0].P.Value();
+                }
 
                 List<int> vertIndexes = GetVertIndexes(pList, skipValue);
 
