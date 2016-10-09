@@ -10,6 +10,8 @@ namespace WindWakerCollisionEditor
 {
     class Hierarchy
     {
+        private static int nameIncrement;
+
         public string Name { get; set; }
 
         public int NameIndex { get; set; }
@@ -46,6 +48,9 @@ namespace WindWakerCollisionEditor
         {
             Name = name;
 
+            if (Name == null)
+                Name = "map" + nameIncrement++;
+
             Scale = Vector3.One;
 
             Rotation = new int[] { 0, 0, 0 };
@@ -79,6 +84,9 @@ namespace WindWakerCollisionEditor
         {
             Name = cat.Name;
 
+            if (Name == null)
+                Name = "map" + nameIncrement++;
+
             Scale = Vector3.One;
 
             Rotation = new int[] { 0, 0, 0 };
@@ -111,6 +119,9 @@ namespace WindWakerCollisionEditor
         public Hierarchy(Group grp)
         {
             Name = grp.Name;
+
+            if (Name == null)
+                Name = "map" + nameIncrement++;
 
             Scale = Vector3.One;
 
