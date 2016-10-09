@@ -25,6 +25,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Common;
+using System.Globalization;
 
 namespace WindWakerCollisionEditor
 {
@@ -299,6 +300,11 @@ namespace WindWakerCollisionEditor
         /// <param name="fileList">The RecentFileList to associate with this ViewModel</param>
         public void CreateGraphicsContext(GLControl ctrl, WindowsFormsHost host, RecentFileList fileList)
         {
+            // There's a bug where some cultures (French, etc) use a ',' instead of a '.' for decimals.
+            // For example, 3.14 in US English becomes 3,14 in French. This forces the app's culture info
+            // to US English, and thus to use '.' as the decimal separator.
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+
             Renderer = new Renderer(ctrl, host);
 
             SelectedTriangles = new TriangleSelectionViewModel();

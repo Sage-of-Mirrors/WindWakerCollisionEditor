@@ -105,11 +105,11 @@
         <DockPanel LastChildFill="True" HorizontalAlignment="Left" Width="210" Background="#FFC7C7C7" Margin="1,0,0,0" Grid.ColumnSpan="2" Height="105" VerticalAlignment="Bottom">
             <Grid Width="210" DockPanel.Dock="Right" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Margin="0,-5,0,0">
                 <Label Content="Terrain Type:" Margin="3,7,0,85" HorizontalAlignment="Left"/>
-                <Label Content="Room Number:" Margin="3,40,0,46" HorizontalAlignment="Left" Width="95"/>
-                <ComboBox Margin="98,10,0,87" SelectedValue="{Binding SelectedCategory.Terrain}" 
-					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource terrainFromEnum}}" Width="107" HorizontalAlignment="Left"/>
-                <TextBox Margin="98,41,0,55" HorizontalAlignment="Left" Width="107" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
-                <Label Content="Name:" HorizontalAlignment="Left" Margin="4,73,0,21"/>
+                <Label Content="Room Table Index:" Margin="3,40,0,46" HorizontalAlignment="Left" Width="110"/>
+                <ComboBox Margin="86,10,0,87" SelectedValue="{Binding SelectedCategory.Terrain}" 
+					 IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" ItemsSource="{Binding Source={StaticResource terrainFromEnum}}" Width="119" HorizontalAlignment="Left"/>
+                <TextBox Margin="113,41,0,55" HorizontalAlignment="Left" Width="92" Text="{Binding SelectedCategory.RoomNumber}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}"/>
+                <Label Content="Name:" HorizontalAlignment="Left" Margin="3,74,0,20"/>
                 <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding Mode=TwoWay, Path=SelectedCategory.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedCategory, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVis}}"  Width="106"/>
                 <TextBox HorizontalAlignment="Left" Margin="98,75,0,23" TextWrapping="Wrap" Text="{Binding Mode=TwoWay, Path=SelectedGroup.Name, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedGroup, Converter={StaticResource NullToFalseConverter}}" Visibility="{Binding SelectedGroup, Converter={StaticResource NullToVis}}"  Width="106"/>
             </Grid>

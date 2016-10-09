@@ -410,7 +410,7 @@ namespace WindWakerCollisionEditor
             m_camMoveBg = (bitField3 & 0xFF);
             m_roomCamID = (bitField3 & 0xFF00) >> 0x08;
             m_roomPathID = (bitField3 & 0xFF0000) >> 0x10;
-            m_roomPathPntNo = (int)(bitField3 & 0xFF000000) >> 0x18;
+            m_roomPathPntNo = (bitField3 & unchecked((int)0xFF000000)) >> 0x18;
 
             m_cameraBehavior = reader.ReadInt32();
         }

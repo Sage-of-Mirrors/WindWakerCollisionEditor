@@ -459,7 +459,7 @@ namespace WindWakerCollisionEditor
             PolyColor = 255;
 
             m_roomPathID = 255;
-            m_roomPathPntNo = -1;
+            m_roomPathPntNo = 255;
 
             m_roomCamID = 255;
             m_camID = 255;
