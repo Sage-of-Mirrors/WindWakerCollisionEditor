@@ -38,6 +38,7 @@
                     <MenuItem Header="_Open" Command="{Binding OnRequestMapOpen}"/>
                     <MenuItem Header="_Save" Command="{Binding OnRequestMapSave}"/>
                     <MenuItem Header="Save _As" Command="{Binding OnRequestMapSaveAs}"/>
+                    <MenuItem Header="Export O_BJ" Command="{Binding OnRequestExportObj}"/>
                     <MenuItem Header="_Close" Command="{Binding OnRequestMapClose}"/>
                     <common:RecentFileList x:Name="RecentFileList"/>
                     <MenuItem Header="E_xit" Command="{Binding OnRequestApplicationClose}"/>

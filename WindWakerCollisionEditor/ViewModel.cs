@@ -489,6 +489,52 @@ namespace WindWakerCollisionEditor
             }
         }
 
+        private void ExportObj()
+        {
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "OBJ files (*.obj)|*.obj";
+
+            if (saveFile.ShowDialog() == true)
+            {
+                StringWriter writer = new StringWriter();
+                writer.WriteLine("# OBJ exporter from Wind Waker Collision Editor.");
+
+                foreach (Category cat in Categories)
+                {
+                    foreach (Group grp in cat.Groups)
+                    {
+                        foreach (Triangle tri in grp.Triangles)
+                        {
+                            writer.Write($"v { tri.Vertex1.X } { tri.Vertex1.Y } { tri.Vertex1.Z }\n");
+                            writer.Write($"v { tri.Vertex2.X } { tri.Vertex2.Y } { tri.Vertex2.Z }\n");
+                            writer.Write($"v { tri.Vertex3.X } { tri.Vertex3.Y } { tri.Vertex3.Z }\n");
+                        }
+                    }
+                }
+
+                writer.WriteLine();
+
+                int faceIndex = 1;
+                foreach (Category cat in Categories)
+                {
+                    foreach (Group grp in cat.Groups)
+                    {
+                        writer.WriteLine($"o { grp.Name }");
+                        foreach (Triangle tri in grp.Triangles)
+                        {
+                            writer.Write($"f { faceIndex++ } { faceIndex++ } { faceIndex++ }\n");
+                        }
+                    }
+                }
+
+                using (FileStream strm = new FileStream(saveFile.FileName, FileMode.Create))
+                {
+                    EndianBinaryWriter objWriter = new EndianBinaryWriter(strm, Endian.Big);
+                    objWriter.Write(writer.ToString());
+                }
+            }
+        }
+
         /// <summary>
         /// Asks the user if they would like to save the currently open file.
         /// </summary>
@@ -1181,6 +1227,11 @@ namespace WindWakerCollisionEditor
         public ICommand OnRequestOpenWiki
         {
             get { return new RelayCommand(x => OpenWiki()); }
+        }
+
+        public ICommand OnRequestExportObj
+        {
+            get { return new RelayCommand(x => ExportObj(), x => isDataLoaded); }
         }
         #endregion
 
